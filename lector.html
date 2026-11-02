@@ -18,8 +18,13 @@
       <a class="nav-link" href="index.html">Inicio</a>
       <a class="nav-link" href="biblioteca.html">Biblioteca</a>
       <a class="nav-link" href="lector.html" aria-current="page">Lector</a>
-      <a class="icon-btn" href="acerca.html#descargo" aria-label="Información y descargo de responsabilidad" title="Información">ⓘ</a>
-      <button class="icon-btn" id="themeToggle" aria-label="Cambiar tema claro/oscuro">☾</button>
+      <a class="icon-btn" href="acerca.html#descargo" aria-label="Información y descargo de responsabilidad" title="Información">
+        <svg class="ico-svg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="8.2" r="1.2" fill="currentColor"/><rect x="11.1" y="10.8" width="1.8" height="6.4" rx="0.9" fill="currentColor"/></svg>
+      </a>
+      <button class="icon-btn" id="themeToggle" aria-label="Cambiar tema claro/oscuro">
+        <svg class="ico-svg ico-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+        <svg class="ico-svg ico-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.7"/><g stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M18.5 5.5l-1.7 1.7M7.2 16.8l-1.7 1.7"/></g></svg>
+      </button>
     </nav>
   </div>
 </header>
@@ -28,14 +33,24 @@
   <!-- barra de controles del lector -->
   <div class="reader-topbar" id="readerTopbar" hidden>
     <div class="container">
-      <a class="back-link" href="lector.html">← Capítulos</a>
+      <a class="back-link" href="lector.html">
+        <svg class="ico-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 6 8.5 12l6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Capítulos
+      </a>
       <div class="lang-switch" role="group" aria-label="Idioma del texto">
         <button data-lang="es" aria-pressed="true">ES</button>
         <button data-lang="en" aria-pressed="false">EN</button>
       </div>
+      <button class="icon-btn" id="tocBtn" aria-label="Abrir índice de contenidos" aria-expanded="false" aria-controls="tocDrawer">
+        <svg class="ico-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6.5h16M4 12h16M4 17.5h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
       <div class="font-controls">
-        <button class="icon-btn" id="fsMinus" aria-label="Reducir tamaño de letra">A−</button>
-        <button class="icon-btn" id="fsPlus" aria-label="Aumentar tamaño de letra">A+</button>
+        <button class="icon-btn" id="fsMinus" aria-label="Reducir tamaño de letra">
+          <svg class="ico-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 18 11 5.5h1.4L18.4 18M7.4 14.4h8.6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="icon-btn" id="fsPlus" aria-label="Aumentar tamaño de letra">
+          <svg class="ico-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18 10.5 4h1.5L18.5 18h-2.1l-1.5-3.3H7.6L6.1 18Zm4.3-5.1h6l-3-6.8Z" fill="currentColor"/><path d="M19.5 11v5M17 13.5h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </button>
       </div>
     </div>
   </div>
@@ -45,32 +60,28 @@
     <h1>Lector</h1>
     <p class="sub">Lee el texto completo de cada capítulo en español o inglés, cómodamente desde tu pantalla.</p>
   </section>
-  <div class="reader-toc" id="readerToc">
-    <div class="skeleton" style="height:80px"></div>
-    <div class="skeleton" style="height:80px"></div>
-    <div class="skeleton" style="height:80px"></div>
-  </div>
-
-  <!-- cargando -->
-  <div class="reader-loading" id="readerLoading" hidden>
-    <div class="skeleton t"></div>
-    <div class="skeleton"></div>
-    <div class="skeleton"></div>
-    <div class="skeleton" style="width:70%"></div>
-    <div class="skeleton"></div>
-    <div class="skeleton" style="width:85%"></div>
-    <div class="skeleton"></div>
-    <div class="skeleton" style="width:60%"></div>
-  </div>
+  <div class="reader-toc" id="readerToc"></div>
 
   <!-- contenido -->
   <article class="reader-body" id="readerContent" hidden></article>
 </main>
 
+<!-- drawer de índice (tabla de contenidos del capítulo) -->
+<div class="drawer-backdrop" id="drawerBackdrop" hidden></div>
+<aside class="toc-drawer" id="tocDrawer" aria-label="Índice de contenidos" aria-hidden="true">
+  <div class="toc-drawer-head">
+    <span class="toc-drawer-title">Contenido</span>
+    <button class="icon-btn" id="tocClose" aria-label="Cerrar índice">
+      <svg class="ico-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="m6.5 6.5 11 11m0-11-11 11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+  <nav class="toc-drawer-list" id="tocDrawerList"></nav>
+</aside>
+
 <nav class="tabbar" aria-label="Navegación principal">
-  <a href="index.html"><span class="tab-ico">🏠</span>Inicio</a>
-  <a href="biblioteca.html"><span class="tab-ico">📚</span>Biblioteca</a>
-  <a href="acerca.html"><span class="tab-ico">ℹ️</span>Acerca</a>
+  <a href="index.html"><span class="tab-ico"><svg class="ico-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.2 12 4l8 7.2M6 9.8V20h4.6v-5h2.8v5H18V9.8" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Inicio</a>
+  <a href="biblioteca.html"><span class="tab-ico"><svg class="ico-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5h5.2a2 2 0 0 1 2 2V19a1.6 1.6 0 0 0-1.6-1.6H5Zm14 0h-5.2a2 2 0 0 0-2 2V19a1.6 1.6 0 0 1 1.6-1.6H19Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></span>Biblioteca</a>
+  <a href="acerca.html"><span class="tab-ico"><svg class="ico-svg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="8.2" r="1.2" fill="currentColor"/><rect x="11.1" y="10.8" width="1.8" height="6.4" rx="0.9" fill="currentColor"/></svg></span>Acerca</a>
 </nav>
 
 <footer class="site-footer">
@@ -83,14 +94,13 @@
 <script src="js/theme.js"></script>
 <script src="js/app.js"></script>
 <script>
-// modo lector: ocultar índice cuando hay capítulo
+// modo lector: ocultar índice de capítulos cuando hay capítulo
 (function(){
   var params = new URLSearchParams(location.search);
   if (params.get('cap')){
     document.getElementById('readerHome').hidden = true;
     document.getElementById('readerToc').hidden = true;
     document.getElementById('readerTopbar').hidden = false;
-    document.title = 'Lector · Protocolos (proyecto no oficial)';
   }
 })();
 </script>

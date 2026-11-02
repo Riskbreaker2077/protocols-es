@@ -1,17 +1,28 @@
-/* Protocolos (proyecto no oficial) — lógica del sitio, reproductor y lector. */
+/* Protocolos (proyecto no oficial) — lógica del sitio, reproductor y lector.
+   Sin checks de red en runtime: la disponibilidad de PDFs, pistas y duraciones
+   viene precomputada en js/data.json. */
 (function(){
 'use strict';
 
 var DATA = null;
 var state = { chapter: null, trackIndex: -1, transcript: [], currentPara: -1 };
 var CH_ART = {
-  '01_dormir':'assets/img/c1_dormir.svg',
-  '02_ejercicio':'assets/img/c2_ejercicio.svg',
-  '03_control_del_estres':'assets/img/c3_estres.svg',
-  '04_nutricion':'assets/img/c4_nutricion.svg',
-  '05_luz':'assets/img/c5_luz.svg',
-  '06_enfoque':'assets/img/c6_enfoque.svg',
-  '07_crecimiento_personal':'assets/img/c7_crecimiento.svg'
+  '01_dormir':'assets/img/c1_dormir.png',
+  '02_ejercicio':'assets/img/c2_ejercicio.png',
+  '03_control_del_estres':'assets/img/c3_estres.png',
+  '04_nutricion':'assets/img/c4_nutricion.png',
+  '05_luz':'assets/img/c5_luz.png',
+  '06_enfoque':'assets/img/c6_enfoque.png',
+  '07_crecimiento_personal':'assets/img/c7_crecimiento.png'
+};
+var SPEEDS = [1, 1.25, 1.5, 1.75, 2, 0.75];
+var speedIdx = 1;
+
+var ICO = {
+  play: '<svg class="ico-svg ico-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 5.5v13l10-6.5Z" fill="currentColor"/></svg>',
+  pause: '<svg class="ico-svg ico-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="5.5" width="3.4" height="13" rx="1" fill="currentColor"/><rect x="13.6" y="5.5" width="3.4" height="13" rx="1" fill="currentColor"/></svg>',
+  book: '<svg class="ico-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5.6C10.4 4.3 8.3 3.7 5.5 3.7c-.8 0-1.5.06-2.2.17v13.9c.7-.11 1.4-.17 2.2-.17 2.8 0 4.9.6 6.5 1.9 1.6-1.3 3.7-1.9 6.5-1.9.8 0 1.5.06 2.2.17V3.87a13 13 0 0 0-2.2-.17c-2.8 0-4.9.6-6.5 1.9Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M12 5.6v13.9" stroke="currentColor" stroke-width="1.7"/></svg>',
+  arrow: '<svg class="ico-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9.5 7H17v7.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>'
 };
 
 function $(id){ return document.getElementById(id); }
@@ -43,8 +54,8 @@ function chapterCard(ch, i){
     '<p>' + esc(ch.desc) + '</p>' +
     '<span class="meta">' + (ch.tracks.length - 1) + ' protocolos · ' + n + '/' + ch.tracks.length + ' pistas de audio</span>' +
     '<span class="card-actions">' +
-      '<span class="chip">▶ Escuchar</span>' +
-      '<span class="chip alt" data-reader="' + esc(ch.slug) + '">📖 Leer</span>' +
+      '<span class="chip">' + ICO.play + 'Escuchar</span>' +
+      '<span class="chip alt" data-reader="' + esc(ch.slug) + '">' + ICO.book + 'Leer</span>' +
     '</span>' +
     '</span>';
   // El chip "Leer" navega al lector en lugar del capítulo.
@@ -78,7 +89,7 @@ function renderReaderToc(){
   });
 }
 
-/* ---------- vista de capítulo ---------- */
+/* ---------- vista de capítulo (estilo app de música) ---------- */
 function renderChapter(slug){
   var idx = DATA.chapters.findIndex(function(c){ return c.slug === slug; });
   if (idx < 0) return false;
@@ -86,47 +97,56 @@ function renderChapter(slug){
   state.chapter = ch;
   $('libraryView').hidden = true;
   $('libraryHead').hidden = true;
-  $('chapterView').hidden = false;
+  var view = $('chapterView');
+  view.hidden = false;
+  view.classList.add('fade-in');
   document.title = ch.titulo + ' · Protocolos (proyecto no oficial)';
   $('chNum').textContent = 'Capítulo ' + (idx+1);
   $('chTitle').textContent = ch.titulo;
   $('chEn').textContent = ch.en;
   $('chDesc').textContent = ch.desc;
-  var art = $('chArt');
-  if (art){ art.src = CH_ART[ch.slug] || 'assets/img/hero.svg'; art.alt = ''; }
+  var art = CH_ART[ch.slug] || 'assets/img/hero.svg';
+  var artEl = $('chArt');
+  if (artEl){ artEl.src = art; artEl.alt = ''; }
+  var pfArt = $('pfArt');
+  if (pfArt) pfArt.src = art;
   var readBtn = $('readOnlineBtn');
   if (readBtn) readBtn.href = 'lector.html?cap=' + encodeURIComponent(slug) + '&lang=es';
 
-  // PDFs: se generan en paralelo; estado de carga / próximo si faltan.
+  // PDFs: disponibilidad precomputada en data.json — sin peticiones de verificación.
   var row = $('pdfRow');
-  row.innerHTML = '';
-  [['ES','es','Español'],['EN','en','English']].forEach(function(p){
-    var code = p[0], dir = p[1], name = p[2];
+  row.querySelectorAll('.pdf-btn').forEach(function(b){ b.remove(); });
+  [['es','Español'],['en','English']].forEach(function(p){
+    var dir = p[0], name = p[1];
     var b = document.createElement('a');
     b.className = 'pdf-btn';
     b.rel = 'noopener';
-    b.innerHTML = '<span class="flag">' + code + '</span> PDF · ' + name;
     var url = 'assets/pdf/' + dir + '/' + ch.slug + '.pdf';
-    fetch(url, {method:'HEAD'}).then(function(r){
-      if (r.ok){ b.href = url; b.setAttribute('download',''); }
-      else { b.classList.add('unavailable'); b.innerHTML += ' <small>(próximamente)</small>'; b.removeAttribute('href'); }
-    }).catch(function(){
-      b.classList.add('unavailable'); b.innerHTML += ' <small>(próximamente)</small>'; b.removeAttribute('href');
-    });
+    if (ch.pdf && ch.pdf[dir]){
+      b.href = url;
+      b.setAttribute('download','');
+      b.innerHTML = '<span class="flag">' + dir.toUpperCase() + '</span> PDF · ' + name;
+    } else {
+      b.classList.add('unavailable');
+      b.innerHTML = '<span class="flag">' + dir.toUpperCase() + '</span> PDF · ' + name + ' <small>(próximamente)</small>';
+    }
     row.appendChild(b);
   });
 
-  // Lista de pistas.
+  // Playlist de pistas.
   var list = $('trackList');
   list.innerHTML = '';
   ch.tracks.forEach(function(t, i){
     var el = document.createElement(t.available ? 'button' : 'div');
     el.className = 'track' + (t.available ? '' : ' soon');
+    el.setAttribute('role','listitem');
+    var dur = t.available && t.duration ? '<span class="t-dur">' + fmt(t.duration) + '</span>' : '<span class="t-dur muted">—</span>';
     el.innerHTML =
-      '<span class="icon">' + (t.available ? '▶' : '·') + '</span>' +
-      '<span><span class="t-title">' + esc(t.titulo) + '</span><br>' +
-      '<span class="t-sub">' + (t.available ? 'Pista de audio disponible' : 'En producción') + '</span></span>' +
-      (t.available ? '' : '<span class="soon-tag">Próximamente</span>');
+      '<span class="t-num">' + (i < 10 ? '0' : '') + (i+1) + '</span>' +
+      '<span class="t-body"><span class="t-title">' + esc(t.titulo) + '</span>' +
+      '<span class="t-sub">' + (t.available ? 'Disponible' : 'En producción') + '</span></span>' +
+      dur +
+      (t.available ? '<span class="t-play" aria-hidden="true">' + ICO.play + '</span>' : '<span class="soon-tag">Próximamente</span>');
     if (t.available){
       el.addEventListener('click', function(){ playTrack(i); });
     }
@@ -140,21 +160,21 @@ function renderChapter(slug){
 var audio = null;
 function ensureAudio(){ if (!audio) audio = $('audio'); return audio; }
 
-function setMiniProgress(pct){
-  var bar = document.querySelector('#pmProgress i');
-  if (bar) bar.style.width = pct + '%';
+function setPlayingUI(playing){
+  var p = $('player');
+  p.classList.toggle('is-playing', playing);
 }
 
 function playTrack(i){
   var t = state.chapter.tracks[i];
+  if (!t || !t.available) return;
   state.trackIndex = i;
   var a = ensureAudio();
   a.src = t.audio;
-  a.playbackRate = parseFloat($('speedSelect').value) || 1;
-  a.play().then(function(){
-    $('playPause').textContent = '⏸';
-  }).catch(function(){});
-  $('playerTitle').innerHTML = esc(t.titulo) + '<span class="chap">' + esc(state.chapter.titulo) + '</span>';
+  a.playbackRate = SPEEDS[speedIdx];
+  a.play().catch(function(){});
+  $('playerTitle').textContent = t.titulo;
+  $('pfChap').textContent = state.chapter.titulo;
   $('pmTitle').textContent = t.titulo;
   $('pmChap').textContent = state.chapter.titulo;
   $('downloadBtn').href = t.audio;
@@ -173,13 +193,19 @@ function playTrack(i){
 function togglePlay(){
   var a = ensureAudio();
   if (!a.src) return;
-  if (a.paused){ a.play(); $('playPause').textContent = '⏸'; }
-  else { a.pause(); $('playPause').textContent = '▶'; }
+  if (a.paused){ a.play().catch(function(){}); }
+  else { a.pause(); }
 }
 
 function nextTrack(){
   if (!state.chapter) return;
   for (var j = state.trackIndex + 1; j < state.chapter.tracks.length; j++){
+    if (state.chapter.tracks[j].available){ playTrack(j); return; }
+  }
+}
+function prevTrack(){
+  if (!state.chapter) return;
+  for (var j = state.trackIndex - 1; j >= 0; j--){
     if (state.chapter.tracks[j].available){ playTrack(j); return; }
   }
 }
@@ -227,7 +253,7 @@ function loadTranscript(t){
 function seek(sec){
   var a = ensureAudio();
   a.currentTime = sec;
-  if (a.paused){ a.play(); $('playPause').textContent = '⏸'; }
+  if (a.paused){ a.play().catch(function(){}); }
 }
 
 function onTimeUpdate(){
@@ -236,8 +262,10 @@ function onTimeUpdate(){
   var pct = (a.currentTime / a.duration) * 100;
   $('progressFill').style.width = pct + '%';
   $('progressBar').setAttribute('aria-valuenow', pct.toFixed(1));
-  $('timeLabel').textContent = fmt(a.currentTime) + ' / ' + fmt(a.duration);
-  setMiniProgress(pct);
+  $('timeCur').textContent = fmt(a.currentTime);
+  $('timeLabel').textContent = fmt(a.duration);
+  var bar = document.querySelector('#pmProgress i');
+  if (bar) bar.style.width = pct + '%';
   // resaltar párrafo actual
   var cur = -1;
   for (var i = 0; i < state.transcript.length; i++){
@@ -252,6 +280,7 @@ function onTimeUpdate(){
 
 /* ---------- lector embebido ---------- */
 var reader = { slug: null, lang: 'es', cache: {}, fs: parseFloat(localStorage.getItem('readerFs')) || 1.15 };
+var SUBHEADS = /^(QUÉ HACER|CÓMO FUNCIONA|PREGUNTAS)/i;
 
 function readerInit(){
   var wrap = $('readerContent');
@@ -272,6 +301,22 @@ function readerInit(){
   $('fsMinus').addEventListener('click', function(){ reader.fs = Math.max(0.9, reader.fs - 0.1); applyReaderFs(); });
   $('fsPlus').addEventListener('click', function(){ reader.fs = Math.min(1.9, reader.fs + 0.1); applyReaderFs(); });
 
+  // drawer de índice
+  var drawer = $('tocDrawer'), backdrop = $('drawerBackdrop'), tocBtn = $('tocBtn');
+  function setDrawer(open){
+    drawer.classList.toggle('open', open);
+    drawer.setAttribute('aria-hidden', String(!open));
+    tocBtn.setAttribute('aria-expanded', String(open));
+    backdrop.hidden = !open;
+  }
+  tocBtn.addEventListener('click', function(){ setDrawer(!drawer.classList.contains('open')); });
+  $('tocClose').addEventListener('click', function(){ setDrawer(false); });
+  backdrop.addEventListener('click', function(){ setDrawer(false); });
+  $('tocDrawerList').addEventListener('click', function(e){
+    var a = e.target.closest('a');
+    if (a) setDrawer(false);
+  });
+
   // barra de progreso de lectura
   var rp = $('readerProgress');
   window.addEventListener('scroll', function(){
@@ -282,7 +327,6 @@ function readerInit(){
 
   if (DATA && DATA.chapters.length){ renderReaderToc(); }
   if (reader.slug){ loadChapterText(reader.slug, reader.lang); }
-  else if ($('readerLoading')) $('readerLoading').hidden = true;
 }
 
 function applyReaderFs(){
@@ -290,15 +334,73 @@ function applyReaderFs(){
   localStorage.setItem('readerFs', String(reader.fs));
 }
 
+function slugifyHeading(text, i){
+  return 'sec-' + (i + 1);
+}
+
+function normTitle(s){
+  return s.toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/^protocolo de [a-z]+\s*/,'')
+    .replace(/[^a-z0-9]/g,'');
+}
+
+/* Índice del drawer: Introducción + todos los protocolos de data.json.
+   Los protocolos sin encabezado propio en el texto se anclan al siguiente
+   encabezado existente (salto aproximado, nunca entrada muerta). */
+function buildReaderToc(headings, tracks){
+  var byNorm = {};
+  headings.forEach(function(h){
+    if (!h.isChapterTitle) byNorm[normTitle(h.title)] = h.id;
+  });
+  var entries = [];
+  var pending = [];
+  var intro = headings.find(function(h){ return h.isChapterTitle; });
+  if (intro) entries.push({id: intro.id, title: 'Introducción', num: '·'});
+  (tracks || []).forEach(function(t, i){
+    if (i === 0) return; // la intro ya está
+    var id = byNorm[normTitle(t.titulo)];
+    if (id){
+      pending.forEach(function(p){ p.id = id; });
+      pending = [];
+      entries.push({id: id, title: t.titulo, num: 'P' + entries.length});
+    } else {
+      pending.push({id: null, title: t.titulo, num: 'P' + entries.length});
+      entries.push({id: null, title: t.titulo, num: 'P' + entries.length, pending: true});
+    }
+  });
+  var tail = headings.filter(function(h){ return !h.isChapterTitle; }).pop();
+  pending.forEach(function(p){ p.id = tail ? tail.id : (intro ? intro.id : null); });
+  // fill ids for pending entries already pushed
+  entries.forEach(function(e, i){
+    if (!e.id){
+      for (var j = i + 1; j < entries.length; j++){
+        if (entries[j].id){ e.id = entries[j].id; break; }
+      }
+      if (!e.id) e.id = tail ? tail.id : (intro ? intro.id : null);
+    }
+  });
+  return entries;
+}
+
+function buildTocDrawer(entries){
+  var list = $('tocDrawerList');
+  list.innerHTML = '';
+  entries.forEach(function(h){
+    if (!h.id) return;
+    var a = document.createElement('a');
+    a.href = '#' + h.id;
+    a.innerHTML = '<span class="tocd-num">' + h.num + '</span><span class="tocd-t">' + esc(h.title) + '</span>';
+    list.appendChild(a);
+  });
+}
+
 function loadChapterText(slug, lang){
   var wrap = $('readerContent');
-  var loading = $('readerLoading');
-  if (loading) loading.hidden = false;
-  wrap.hidden = true;
-  wrap.innerHTML = '';
-  var url = 'assets/texto/' + lang + '/' + slug + '.json';
-  fetch(url).then(function(r){ if (!r.ok) throw 0; return r.json(); }).then(function(data){
-    if (loading) loading.hidden = true;
+  fetch('assets/texto/' + lang + '/' + slug + '.json').then(function(r){
+    if (!r.ok) throw 0;
+    return r.json();
+  }).then(function(data){
     wrap.hidden = false;
     wrap.classList.add('fade-in');
     var meta = DATA && DATA.chapters.find(function(c){ return c.slug === slug; });
@@ -309,16 +411,42 @@ function loadChapterText(slug, lang){
       '<p class="r-en">' + esc(meta ? meta.en : '') + '</p>' +
       '<div class="reader-content" id="readerBody"></div>';
     var body = $('readerBody');
+    var headings = [];
+    var seenProto = false;
     data.paragraphs.forEach(function(p){
-      var el = document.createElement(p.type === 'h' ? 'h2' : 'p');
-      if (p.type === 'h') el.className = 'h';
-      el.textContent = p.text;
-      body.appendChild(el);
+      if (p.type === 'h'){
+        var isChapterTitle = /^Capítulo \d/i.test(p.text);
+        var id = slugifyHeading(p.text, headings.length);
+        headings.push({id: id, title: p.text, isChapterTitle: isChapterTitle});
+        var el = document.createElement('h2');
+        el.className = 'h proto-head';
+        el.id = id;
+        if (isChapterTitle) el.classList.add('chapter-title');
+        else seenProto = true;
+        el.textContent = p.text;
+        body.appendChild(el);
+      } else {
+        var pel = document.createElement('p');
+        var txt = p.text;
+        if (SUBHEADS.test(txt)){
+          pel.className = 'subhead';
+          pel.textContent = txt;
+        } else if (txt.startsWith('•')){
+          pel.className = 'bullet';
+          pel.textContent = txt.replace(/^•\s*/, '');
+        } else if (!seenProto){
+          pel.className = 'intro-p';
+          pel.textContent = txt;
+        } else {
+          pel.textContent = txt;
+        }
+        body.appendChild(pel);
+      }
     });
+    buildTocDrawer(buildReaderToc(headings, meta ? meta.tracks : null));
     document.title = (meta ? meta.titulo : data.title) + ' · Lector · Protocolos';
     window.scrollTo(0,0);
   }).catch(function(){
-    if (loading) loading.hidden = true;
     wrap.hidden = false;
     wrap.innerHTML = '<div class="reader-empty">El texto de este capítulo aún no está disponible.</div>';
   });
@@ -339,12 +467,16 @@ document.addEventListener('DOMContentLoaded', function(){
 
   if ($('player')){
     $('playPause').addEventListener('click', togglePlay);
-    $('nextBtn').addEventListener('click', nextTrack);
-    $('speedSelect').addEventListener('change', function(){
-      ensureAudio().playbackRate = parseFloat(this.value) || 1;
-    });
-    // mini-player: tocar la info expande; botones play/expand
     $('pmPlay').addEventListener('click', function(e){ e.stopPropagation(); togglePlay(); });
+    $('nextBtn').addEventListener('click', nextTrack);
+    $('prevBtn').addEventListener('click', prevTrack);
+    $('speedBtn').addEventListener('click', function(){
+      speedIdx = (speedIdx + 1) % SPEEDS.length;
+      var rate = SPEEDS[speedIdx];
+      ensureAudio().playbackRate = rate;
+      $('speedLabel').textContent = rate + '×';
+    });
+    // mini-player: tocar la info expande
     $('pmExpand').addEventListener('click', function(e){
       e.stopPropagation();
       $('player').classList.add('expanded');
@@ -352,16 +484,24 @@ document.addEventListener('DOMContentLoaded', function(){
     $('collapseBtn').addEventListener('click', function(){
       $('player').classList.remove('expanded');
     });
+    // barra de progreso arrastrable (pointer events)
     var bar = $('progressBar');
-    function seekFromEvent(e){
+    var dragging = false;
+    function seekFromX(clientX){
       var a = ensureAudio();
-      if (!isFinite(a.duration)) return;
+      if (!isFinite(a.duration) || a.duration <= 0) return;
       var rect = bar.getBoundingClientRect();
-      var x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+      var x = clientX - rect.left;
       a.currentTime = Math.max(0, Math.min(1, x / rect.width)) * a.duration;
     }
-    bar.addEventListener('click', seekFromEvent);
-    bar.addEventListener('touchstart', seekFromEvent, {passive:true});
+    bar.addEventListener('pointerdown', function(e){
+      dragging = true;
+      try { bar.setPointerCapture(e.pointerId); } catch(err){}
+      seekFromX(e.clientX);
+    });
+    bar.addEventListener('pointermove', function(e){ if (dragging) seekFromX(e.clientX); });
+    bar.addEventListener('pointerup', function(){ dragging = false; });
+    bar.addEventListener('pointercancel', function(){ dragging = false; });
     bar.addEventListener('keydown', function(e){
       var a = ensureAudio();
       if (e.key === 'ArrowRight') a.currentTime += 10;
@@ -371,13 +511,12 @@ document.addEventListener('DOMContentLoaded', function(){
       var panel = $('transcriptPanel');
       var open = panel.classList.toggle('open');
       this.setAttribute('aria-expanded', open);
-      this.textContent = open ? 'Ocultar transcripción' : 'Mostrar transcripción';
     });
     var a = $('audio');
     a.addEventListener('timeupdate', onTimeUpdate);
     a.addEventListener('ended', nextTrack);
-    a.addEventListener('play', function(){ $('playPause').textContent = '⏸'; $('pmPlay').textContent = '⏸'; });
-    a.addEventListener('pause', function(){ $('playPause').textContent = '▶'; $('pmPlay').textContent = '▶'; });
+    a.addEventListener('play', function(){ setPlayingUI(true); });
+    a.addEventListener('pause', function(){ setPlayingUI(false); });
   }
 });
 })();
