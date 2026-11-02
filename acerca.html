@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Acerca · Protocolos (proyecto no oficial)</title>
-<meta name="description" content="Cómo se hizo este audiolibro no oficial: captura del Kindle, OCR, traducción asistida por IA y voz sintética.">
+<meta name="description" content="Acerca de este proyecto no oficial: qué es, créditos de la obra original y descargo de responsabilidad.">
+<meta name="theme-color" content="#19aad8">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -12,15 +13,16 @@
   <div class="container">
     <a class="brand" href="index.html"><span class="dot"></span>Protocolos</a>
     <nav class="main-nav" aria-label="Principal">
-      <a href="index.html">Inicio</a>
-      <a href="biblioteca.html">Biblioteca</a>
-      <a href="acerca.html" aria-current="page">Acerca</a>
-      <button id="themeToggle" aria-label="Cambiar tema claro/oscuro">☾</button>
+      <a class="nav-link" href="index.html">Inicio</a>
+      <a class="nav-link" href="biblioteca.html">Biblioteca</a>
+      <a class="nav-link" href="acerca.html" aria-current="page">Acerca</a>
+      <a class="icon-btn" href="acerca.html#descargo" aria-label="Información y descargo de responsabilidad" title="Información">ⓘ</a>
+      <button class="icon-btn" id="themeToggle" aria-label="Cambiar tema claro/oscuro">☾</button>
     </nav>
   </div>
 </header>
 
-<main>
+<main class="page-enter">
   <section class="chapter-head container">
     <span class="badge-nonprofit">Proyecto sin ánimo de lucro</span>
     <h1>Acerca de este proyecto</h1>
@@ -28,28 +30,46 @@
   </section>
 
   <section class="block container">
-    <h2>Cómo se hizo</h2>
-    <p class="sub">Todo el material se generó de forma automatizada a partir de una copia personal del libro.</p>
-    <div class="about-steps">
-      <div class="step"><h3>Captura del Kindle</h3><p>Se tomaron las páginas del libro desde un lector Kindle personal para obtener imágenes de cada página.</p></div>
-      <div class="step"><h3>OCR</h3><p>Las imágenes se pasaron por reconocimiento óptico de caracteres para recuperar el texto original en inglés.</p></div>
-      <div class="step"><h3>Traducción asistida por IA</h3><p>El texto en inglés se tradujo al español con modelos de lenguaje, capítulo por capítulo.</p></div>
-      <div class="step"><h3>Naturalización del texto</h3><p>Una revisión adicional pulió la traducción para que suene natural y fluida, no literal.</p></div>
-      <div class="step"><h3>Voz sintética (TTS)</h3><p>El texto en español se narra con voz sintética de ElevenLabs para crear el audiolibro, con transcripciones sincronizadas.</p></div>
+    <h2>Qué es este sitio</h2>
+    <p class="sub" style="max-width:720px">
+      Aquí puedes <strong>leer el texto completo de los 7 capítulos en línea</strong> (en español o en inglés),
+      descargar cada capítulo en PDF y escuchar el audiolibro por protocolo con transcripciones sincronizadas,
+      todo pensado para leer y escuchar cómodamente desde el celular.
+    </p>
+  </section>
+
+  <section class="block container">
+    <h2>Apoya al autor</h2>
+    <div class="author-links" style="margin:0;max-width:760px">
+      <a class="author-link" href="https://www.amazon.com/dp/B0D3JFXBFW" target="_blank" rel="noopener">
+        <span class="ico">🛒</span>
+        <span><span class="al-t">Comprar el libro en Amazon</span><br><span class="al-s">Edición Kindle y física del original</span></span>
+        <span class="go">↗</span>
+      </a>
+      <a class="author-link" href="https://www.hubermanlab.com" target="_blank" rel="noopener">
+        <span class="ico">🌐</span>
+        <span><span class="al-t">Web oficial de Andrew Huberman</span><br><span class="al-s">hubermanlab.com</span></span>
+        <span class="go">↗</span>
+      </a>
+      <a class="author-link" href="https://www.hubermanlab.com/protocols-book" target="_blank" rel="noopener">
+        <span class="ico">📚</span>
+        <span><span class="al-t">Página oficial del libro</span><br><span class="al-s">Recursos y protocolos del autor</span></span>
+        <span class="go">↗</span>
+      </a>
     </div>
   </section>
 
   <section class="block container">
     <h2>Créditos</h2>
-    <p class="sub" style="max-width:720px">
+    <div class="credits-card">
       Obra original: <em>Protocols: An Operator's Manual for the Human Body</em>, de <strong>Andrew Huberman</strong>, publicado por <strong>Gallery Books / Simon &amp; Schuster</strong>. Toda la autoría intelectual, el texto y los derechos corresponden a su autor y editorial.
-    </p>
+    </div>
   </section>
 
-  <section class="block container">
+  <section class="block container" id="descargo">
     <h2>Descargo de responsabilidad</h2>
     <aside class="disclaimer">
-      Este sitio es un proyecto <strong>educativo, no oficial y sin fines de lucro</strong>. No está afiliado a, patrocinado por ni avalado por Andrew Huberman, Scicomm Media, Gallery Books, Simon &amp; Schuster ni ninguna entidad relacionada. El texto y el audio se ofrecen únicamente con fines de estudio, acceso y discapacidad. Si valoras el libro, <strong><a href="https://www.hubermanlab.com/protocols" target="_blank" rel="noopener">compra el original</a></strong> y apoya al autor. Si eres titular de los derechos y deseas que se retire material, escríbenos y lo haremos de inmediato.
+      Este sitio es un proyecto <strong>educativo, no oficial y sin fines de lucro</strong>. No está afiliado a, patrocinado por ni avalado por Andrew Huberman, Scicomm Media, Gallery Books, Simon &amp; Schuster ni ninguna entidad relacionada. El texto y el audio se ofrecen únicamente con fines de estudio, acceso y discapacidad. Si valoras el libro, <strong><a href="https://www.amazon.com/dp/B0D3JFXBFW" target="_blank" rel="noopener">compra el original</a></strong> y apoya al autor. Si eres titular de los derechos y deseas que se retire material, escríbenos y lo haremos de inmediato.
     </aside>
   </section>
 </main>
@@ -57,9 +77,15 @@
 <footer class="site-footer">
   <div class="container">
     <p>Proyecto no oficial, educativo y sin ánimo de lucro. <em>Protocols</em> © Andrew Huberman. Todos los derechos reservados a su autor y editorial.</p>
-    <p><a href="https://www.hubermanlab.com/protocols" target="_blank" rel="noopener">Compra el libro original</a></p>
+    <p class="footer-links"><a href="https://www.amazon.com/dp/B0D3JFXBFW" target="_blank" rel="noopener">Compra el libro original</a></p>
   </div>
 </footer>
+
+<nav class="tabbar" aria-label="Navegación principal">
+  <a href="index.html"><span class="tab-ico">🏠</span>Inicio</a>
+  <a href="biblioteca.html"><span class="tab-ico">📚</span>Biblioteca</a>
+  <a href="acerca.html" aria-current="page"><span class="tab-ico">ℹ️</span>Acerca</a>
+</nav>
 
 <script src="js/theme.js"></script>
 </body>

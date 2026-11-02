@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Biblioteca · Protocolos (proyecto no oficial)</title>
-<meta name="description" content="Los 7 capítulos de 'Protocols' en PDF (EN/ES) y audiolibro por protocolo.">
+<meta name="description" content="Los 7 capítulos de 'Protocols': lee el texto en línea, descarga el PDF (EN/ES) y escucha el audiolibro por protocolo.">
+<meta name="theme-color" content="#19aad8">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -12,24 +13,25 @@
   <div class="container">
     <a class="brand" href="index.html"><span class="dot"></span>Protocolos</a>
     <nav class="main-nav" aria-label="Principal">
-      <a href="index.html">Inicio</a>
-      <a href="biblioteca.html" aria-current="page">Biblioteca</a>
-      <a href="acerca.html">Acerca</a>
-      <button id="themeToggle" aria-label="Cambiar tema claro/oscuro">☾</button>
+      <a class="nav-link" href="index.html">Inicio</a>
+      <a class="nav-link" href="biblioteca.html" aria-current="page">Biblioteca</a>
+      <a class="nav-link" href="acerca.html">Acerca</a>
+      <a class="icon-btn" href="acerca.html#descargo" aria-label="Información y descargo de responsabilidad" title="Información">ⓘ</a>
+      <button class="icon-btn" id="themeToggle" aria-label="Cambiar tema claro/oscuro">☾</button>
     </nav>
   </div>
 </header>
 
-<main>
+<main class="page-enter">
   <section class="chapter-head container" id="libraryHead">
     <h1>Biblioteca</h1>
-    <p class="sub">Elige un capítulo: PDF en inglés y español, y audio por protocolo. Las pistas marcadas «próximamente» aún se están produciendo.</p>
+    <p class="sub">Elige un capítulo: lee el texto en línea, descarga el PDF en inglés o español y escucha el audio por protocolo. Las pistas marcadas «próximamente» aún se están produciendo.</p>
   </section>
   <section class="container" id="libraryView" style="padding-bottom:16px">
     <div class="chapters-grid" id="chaptersGrid">
-      <div class="skeleton" style="height:150px"></div>
-      <div class="skeleton" style="height:150px"></div>
-      <div class="skeleton" style="height:150px"></div>
+      <div class="skeleton" style="height:230px"></div>
+      <div class="skeleton" style="height:230px"></div>
+      <div class="skeleton" style="height:230px"></div>
     </div>
   </section>
 
@@ -37,12 +39,15 @@
   <section class="container" id="chapterView" hidden>
     <a class="back-link" href="biblioteca.html">← Volver a la biblioteca</a>
     <div class="chapter-head">
+      <img class="ch-art" id="chArt" src="assets/img/hero.svg" alt="" width="800" height="600">
       <p class="num" id="chNum" style="color:var(--accent-strong);font-weight:700;font-size:.85rem;letter-spacing:.08em;text-transform:uppercase"></p>
       <h1 id="chTitle"></h1>
       <p class="en-title" id="chEn"></p>
       <p class="desc" id="chDesc"></p>
     </div>
-    <div class="pdf-row" id="pdfRow"></div>
+    <div class="pdf-row" id="pdfRow">
+      <a class="btn btn-primary" id="readOnlineBtn" href="lector.html">📖 Leer en línea</a>
+    </div>
     <h2 style="font-family:var(--font-display);font-size:1.35rem;margin:16px 0 4px">Audio por protocolo</h2>
     <p class="sub" style="color:var(--ink-soft);margin-bottom:16px">Selecciona una pista para reproducir. Si hay transcripción, se muestra sincronizada.</p>
     <div class="track-list" id="trackList"></div>
@@ -52,37 +57,57 @@
 <footer class="site-footer">
   <div class="container">
     <p>Proyecto no oficial, educativo y sin ánimo de lucro. <em>Protocols</em> © Andrew Huberman. Todos los derechos reservados a su autor y editorial.</p>
-    <p><a href="https://www.hubermanlab.com/protocols" target="_blank" rel="noopener">Compra el libro original</a></p>
+    <p class="footer-links"><a href="https://www.amazon.com/dp/B0D3JFXBFW" target="_blank" rel="noopener">Compra el libro original</a></p>
   </div>
 </footer>
 
-<!-- reproductor fijo -->
+<nav class="tabbar" aria-label="Navegación principal">
+  <a href="index.html"><span class="tab-ico">🏠</span>Inicio</a>
+  <a href="biblioteca.html" aria-current="page"><span class="tab-ico">📚</span>Biblioteca</a>
+  <a href="acerca.html"><span class="tab-ico">ℹ️</span>Acerca</a>
+</nav>
+
+<!-- reproductor fijo (mini-player + expandido) -->
 <div class="player" id="player" role="region" aria-label="Reproductor de audio">
-  <div class="player-inner">
-    <div class="player-top">
-      <button class="pbtn" id="playPause" aria-label="Reproducir o pausar">▶</button>
-      <button class="pbtn small" id="nextBtn" aria-label="Siguiente pista">⏭</button>
-      <div class="player-title" id="playerTitle">—</div>
-      <span class="time" id="timeLabel">0:00 / 0:00</span>
-      <select class="speed-select" id="speedSelect" aria-label="Velocidad de reproducción">
-        <option value="0.75">0.75×</option>
-        <option value="1" selected>1×</option>
-        <option value="1.25">1.25×</option>
-        <option value="1.5">1.5×</option>
-        <option value="1.75">1.75×</option>
-        <option value="2">2×</option>
-      </select>
+  <!-- mini-player -->
+  <div class="player-mini" id="playerMini">
+    <button class="pbtn" id="pmPlay" aria-label="Reproducir o pausar">▶</button>
+    <div class="pm-info">
+      <div class="pm-title" id="pmTitle">—</div>
+      <div class="pm-chap" id="pmChap"></div>
+      <div class="pm-progress" id="pmProgress"><i></i></div>
     </div>
-    <div class="progress-wrap">
-      <div class="progress" id="progressBar" role="slider" aria-label="Barra de progreso" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0">
-        <div class="fill" id="progressFill"><div class="knob"></div></div>
+    <button class="pbtn tiny" id="pmExpand" aria-label="Expandir reproductor">⌃</button>
+  </div>
+  <!-- reproductor completo -->
+  <div class="player-full">
+    <div class="player-inner">
+      <div class="player-top">
+        <button class="pbtn" id="playPause" aria-label="Reproducir o pausar">▶</button>
+        <button class="pbtn small" id="nextBtn" aria-label="Siguiente pista">⏭</button>
+        <div class="player-title" id="playerTitle">—</div>
+        <span class="time" id="timeLabel">0:00 / 0:00</span>
+        <select class="speed-select" id="speedSelect" aria-label="Velocidad de reproducción">
+          <option value="0.75">0.75×</option>
+          <option value="1" selected>1×</option>
+          <option value="1.25">1.25×</option>
+          <option value="1.5">1.5×</option>
+          <option value="1.75">1.75×</option>
+          <option value="2">2×</option>
+        </select>
+        <button class="pbtn tiny" id="collapseBtn" aria-label="Minimizar reproductor">⌄</button>
       </div>
+      <div class="progress-wrap">
+        <div class="progress" id="progressBar" role="slider" aria-label="Barra de progreso" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0">
+          <div class="fill" id="progressFill"><div class="knob"></div></div>
+        </div>
+      </div>
+      <div class="player-actions">
+        <button class="link-btn" id="toggleTranscript" aria-expanded="false">Mostrar transcripción</button>
+        <a class="link-btn" id="downloadBtn" download>Descargar audio</a>
+      </div>
+      <div class="transcript-panel" id="transcriptPanel"></div>
     </div>
-    <div class="player-actions">
-      <button class="link-btn" id="toggleTranscript" aria-expanded="false">Mostrar transcripción</button>
-      <a class="link-btn" id="downloadBtn" download>Descargar audio</a>
-    </div>
-    <div class="transcript-panel" id="transcriptPanel"></div>
   </div>
   <audio id="audio" preload="metadata"></audio>
 </div>

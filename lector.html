@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lector · Protocolos (proyecto no oficial)</title>
+<meta name="description" content="Lee el texto completo de los 7 capítulos de 'Protocols' en español o inglés, con control de tamaño de letra y modo noche.">
+<meta name="theme-color" content="#19aad8">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="reader-progress" id="readerProgress"></div>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="index.html"><span class="dot"></span>Protocolos</a>
+    <nav class="main-nav" aria-label="Principal">
+      <a class="nav-link" href="index.html">Inicio</a>
+      <a class="nav-link" href="biblioteca.html">Biblioteca</a>
+      <a class="nav-link" href="lector.html" aria-current="page">Lector</a>
+      <a class="icon-btn" href="acerca.html#descargo" aria-label="Información y descargo de responsabilidad" title="Información">ⓘ</a>
+      <button class="icon-btn" id="themeToggle" aria-label="Cambiar tema claro/oscuro">☾</button>
+    </nav>
+  </div>
+</header>
+
+<main class="page-enter">
+  <!-- barra de controles del lector -->
+  <div class="reader-topbar" id="readerTopbar" hidden>
+    <div class="container">
+      <a class="back-link" href="lector.html">← Capítulos</a>
+      <div class="lang-switch" role="group" aria-label="Idioma del texto">
+        <button data-lang="es" aria-pressed="true">ES</button>
+        <button data-lang="en" aria-pressed="false">EN</button>
+      </div>
+      <div class="font-controls">
+        <button class="icon-btn" id="fsMinus" aria-label="Reducir tamaño de letra">A−</button>
+        <button class="icon-btn" id="fsPlus" aria-label="Aumentar tamaño de letra">A+</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- sin capítulo: índice de capítulos -->
+  <section class="chapter-head container" id="readerHome">
+    <h1>Lector</h1>
+    <p class="sub">Lee el texto completo de cada capítulo en español o inglés, cómodamente desde tu pantalla.</p>
+  </section>
+  <div class="reader-toc" id="readerToc">
+    <div class="skeleton" style="height:80px"></div>
+    <div class="skeleton" style="height:80px"></div>
+    <div class="skeleton" style="height:80px"></div>
+  </div>
+
+  <!-- cargando -->
+  <div class="reader-loading" id="readerLoading" hidden>
+    <div class="skeleton t"></div>
+    <div class="skeleton"></div>
+    <div class="skeleton"></div>
+    <div class="skeleton" style="width:70%"></div>
+    <div class="skeleton"></div>
+    <div class="skeleton" style="width:85%"></div>
+    <div class="skeleton"></div>
+    <div class="skeleton" style="width:60%"></div>
+  </div>
+
+  <!-- contenido -->
+  <article class="reader-body" id="readerContent" hidden></article>
+</main>
+
+<nav class="tabbar" aria-label="Navegación principal">
+  <a href="index.html"><span class="tab-ico">🏠</span>Inicio</a>
+  <a href="biblioteca.html"><span class="tab-ico">📚</span>Biblioteca</a>
+  <a href="acerca.html"><span class="tab-ico">ℹ️</span>Acerca</a>
+</nav>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>Proyecto no oficial, educativo y sin ánimo de lucro. <em>Protocols</em> © Andrew Huberman. Todos los derechos reservados a su autor y editorial.</p>
+    <p class="footer-links"><a href="https://www.amazon.com/dp/B0D3JFXBFW" target="_blank" rel="noopener">Compra el libro original</a></p>
+  </div>
+</footer>
+
+<script src="js/theme.js"></script>
+<script src="js/app.js"></script>
+<script>
+// modo lector: ocultar índice cuando hay capítulo
+(function(){
+  var params = new URLSearchParams(location.search);
+  if (params.get('cap')){
+    document.getElementById('readerHome').hidden = true;
+    document.getElementById('readerToc').hidden = true;
+    document.getElementById('readerTopbar').hidden = false;
+    document.title = 'Lector · Protocolos (proyecto no oficial)';
+  }
+})();
+</script>
+</body>
+</html>
