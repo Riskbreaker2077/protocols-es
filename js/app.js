@@ -40,9 +40,18 @@ function loadData(cb){
     .catch(function(){ cb({chapters: []}); });
 }
 
+/* "Antes de empezar" para la introducción (00_…), "Capítulo N" para el
+   resto (N sale del slug, así la introducción no corre la numeración). */
+function chapterLabel(ch){
+  var n = parseInt(ch.slug, 10);
+  return n ? 'Capítulo ' + n : 'Antes de empezar';
+}
+
 /* ---------- tarjetas de capítulos ---------- */
 function chapterCard(ch, i){
   var n = ch.tracks.filter(function(t){ return t.available; }).length;
+  var conAudio = ch.tracks.length > 0;
+  var protos = ch.tracks.filter(function(t){ return !/^00_/.test(t.id); }).length;
   var a = document.createElement('a');
   a.className = 'chapter-card fade-in';
   a.href = 'biblioteca.html?cap=' + encodeURIComponent(ch.slug);
@@ -50,12 +59,14 @@ function chapterCard(ch, i){
   a.innerHTML =
     '<span class="art"><img src="' + (CH_ART[ch.slug] || 'assets/img/hero.svg') + '" alt="" loading="lazy"></span>' +
     '<span class="body">' +
-    '<span class="num">Capítulo ' + (i+1) + '</span>' +
+    '<span class="num">' + esc(chapterLabel(ch)) + '</span>' +
     '<h3>' + esc(ch.titulo) + '</h3>' +
     '<p>' + esc(ch.desc) + '</p>' +
-    '<span class="meta">' + (ch.tracks.length - 1) + ' protocolos · ' + n + '/' + ch.tracks.length + ' pistas de audio</span>' +
+    '<span class="meta">' + (conAudio
+      ? (protos ? protos + ' protocolos · ' : '') + n + '/' + ch.tracks.length + (ch.tracks.length === 1 ? ' pista' : ' pistas') + ' de audio'
+      : 'Lectura · texto y PDF') + '</span>' +
     '<span class="card-actions">' +
-      '<span class="chip">' + ICO.play + 'Escuchar</span>' +
+      (conAudio ? '<span class="chip">' + ICO.play + 'Escuchar</span>' : '') +
       '<span class="chip alt" data-reader="' + esc(ch.slug) + '">' + ICO.book + 'Leer</span>' +
     '</span>' +
     '</span>';
@@ -71,7 +82,7 @@ function renderGrid(){
   var grid = $('chaptersGrid');
   if (!grid || !DATA) return;
   grid.innerHTML = '';
-  DATA.chapters.filter(function(ch){ return !ch.oculto; }).forEach(function(ch, i){ grid.appendChild(chapterCard(ch, i)); });
+  DATA.chapters.forEach(function(ch, i){ grid.appendChild(chapterCard(ch, i)); });
 }
 
 /* ---------- índice del lector ---------- */
@@ -102,7 +113,7 @@ function renderChapter(slug){
   view.hidden = false;
   view.classList.add('fade-in');
   document.title = ch.titulo + ' · Protocolos (proyecto no oficial)';
-  $('chNum').textContent = 'Capítulo ' + (idx+1);
+  $('chNum').textContent = chapterLabel(ch);
   $('chTitle').textContent = ch.titulo;
   $('chEn').textContent = ch.en;
   $('chDesc').textContent = ch.desc;
@@ -137,9 +148,14 @@ function renderChapter(slug){
     row.appendChild(b);
   });
 
-  // Playlist de pistas.
+  // Playlist de pistas (la introducción no tiene audio: se oculta el bloque).
   var list = $('trackList');
   list.innerHTML = '';
+  var conAudio = ch.tracks.length > 0;
+  list.hidden = !conAudio;
+  document.querySelectorAll('.playlist-title, .playlist-sub').forEach(function(el){ el.hidden = !conAudio; });
+  var plTitle = document.querySelector('.playlist-title');
+  if (plTitle) plTitle.textContent = parseInt(ch.slug, 10) ? 'Protocolos del capítulo' : 'Audiolibro';
   ch.tracks.forEach(function(t, i){
     var el = document.createElement(t.available ? 'button' : 'div');
     el.className = 'track' + (t.available ? '' : ' soon');

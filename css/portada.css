@@ -1,7 +1,7 @@
 /* ============================================================
    Inicio: portada en cuadrícula 3×3 (P R O / T ● C / O L S).
    Al tocarla, cada ficha gira y revela un capítulo; el centro
-   cambia el tema y la última ficha lleva a la biblioteca.
+   cambia el tema. La primera ficha es la introducción.
    Colores tomados de la carátula: crema #f7f4eb, azul #00ade9,
    rojo #d63a2d → naranja #e67e27.
    ============================================================ */
@@ -125,15 +125,6 @@ main.home{
 [data-theme="dark"] .orb-sun{display:none}
 [data-theme="dark"] .orb-moon{display:block}
 .theme-orb:hover .orb-ico{transform:rotate(-18deg) scale(1.08)}
-
-/* ver más */
-.more{
-  background:var(--cover-blue);color:#fff;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4%;
-}
-.more-t{font-family:var(--cover-font);font-weight:900;font-size:5cqw;letter-spacing:.02em;text-transform:uppercase}
-.more-ico{width:30%;height:auto;transition:transform .3s ease}
-.more:hover .more-ico{transform:translateX(12%)}
 
 /* botón que cubre la cuadrícula mientras se ve la portada */
 .cube-open{position:absolute;inset:-6px;z-index:3;background:none;border:0;cursor:pointer;border-radius:8px}

@@ -5,8 +5,20 @@
    "titulo": "Introducción",
    "en": "Introduction",
    "desc": "Cómo funciona este sistema: qué es un protocolo, por qué funciona y cómo usar el libro.",
-   "oculto": true,
-   "tracks": []
+   "pdf": {
+    "es": true,
+    "en": true
+   },
+   "tracks": [
+    {
+     "id": "00_introduccion",
+     "titulo": "Introducción",
+     "audio": "assets/audio/00_introduccion/00_introduccion.mp3",
+     "transcript": "assets/audio/00_introduccion/00_introduccion.md",
+     "available": false,
+     "duration": null
+    }
+   ]
   },
   {
    "slug": "01_dormir",
