@@ -280,7 +280,7 @@ function onTimeUpdate(){
 
 /* ---------- lector embebido ---------- */
 var reader = { slug: null, lang: 'es', cache: {}, fs: parseFloat(localStorage.getItem('readerFs')) || 1.15 };
-var SUBHEADS = /^(QUÉ HACER|CÓMO FUNCIONA|PREGUNTAS)/i;
+var SUBHEADS = /^(QUÉ (NO )?HACER|CÓMO FUNCIONA|PREGUNTAS|WHAT (NOT )?TO DO|HOW IT WORKS|COMMON QUESTIONS)\b/i;
 
 function readerInit(){
   var wrap = $('readerContent');
@@ -334,51 +334,36 @@ function applyReaderFs(){
   localStorage.setItem('readerFs', String(reader.fs));
 }
 
-function slugifyHeading(text, i){
-  return 'sec-' + (i + 1);
+/* Encabezados de protocolo (tipo "h2" en el JSON).
+   Vienen como "PROTOCOLO DE SUEÑO Mira la luz…" / "SLEEP PROTOCOL View…".
+   Separa la etiqueta en mayúsculas del título y, si el PDF pegó el cuerpo
+   del texto al título, lo corta para devolverlo como párrafos. */
+var PROTO_LABEL = /^((?:[A-ZÁÉÍÓÚÑÜ]+ )*PROTOCOLO?(?: [A-ZÁÉÍÓÚÑÜ]+)*(?: \d+)?:?)\s+([\s\S]*)$/;
+var SUBHEAD_INLINE = /\s(?=(?:QUÉ (?:NO )?HACER|CÓMO FUNCIONA|WHAT (?:NOT )?TO DO|HOW IT WORKS)\b)/;
+
+function splitProtoHeading(text){
+  var m = text.match(PROTO_LABEL);
+  var label = m ? m[1].replace(/:$/, '') : '';
+  var rest = (m ? m[2] : text).trim();
+  var title = rest, body = '';
+  if (rest.length > 160){
+    var cut = rest.search(SUBHEAD_INLINE);
+    var mm;
+    if (cut < 0 && (mm = rest.match(/\)\s+(?=[A-ZÁÉÍÓÚÑ])/))) cut = mm.index + 1;
+    if (cut < 0 && (mm = rest.match(/[.!?]\s/))) cut = mm.index + 1;
+    if (cut > 0){ title = rest.slice(0, cut).trim(); body = rest.slice(cut).trim(); }
+  }
+  return {label: label, title: title, body: body};
 }
 
-function normTitle(s){
-  return s.toLowerCase()
-    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
-    .replace(/^protocolo de [a-z]+\s*/,'')
-    .replace(/[^a-z0-9]/g,'');
-}
-
-/* Índice del drawer: Introducción + todos los protocolos de data.json.
-   Los protocolos sin encabezado propio en el texto se anclan al siguiente
-   encabezado existente (salto aproximado, nunca entrada muerta). */
-function buildReaderToc(headings, tracks){
-  var byNorm = {};
-  headings.forEach(function(h){
-    if (!h.isChapterTitle) byNorm[normTitle(h.title)] = h.id;
-  });
+/* Índice del drawer: Introducción + cada encabezado de protocolo presente
+   en el texto, en orden. Todas las entradas apuntan a un ancla real. */
+function buildReaderToc(headings, lang){
   var entries = [];
-  var pending = [];
-  var intro = headings.find(function(h){ return h.isChapterTitle; });
-  if (intro) entries.push({id: intro.id, title: 'Introducción', num: '·'});
-  (tracks || []).forEach(function(t, i){
-    if (i === 0) return; // la intro ya está
-    var id = byNorm[normTitle(t.titulo)];
-    if (id){
-      pending.forEach(function(p){ p.id = id; });
-      pending = [];
-      entries.push({id: id, title: t.titulo, num: 'P' + entries.length});
-    } else {
-      pending.push({id: null, title: t.titulo, num: 'P' + entries.length});
-      entries.push({id: null, title: t.titulo, num: 'P' + entries.length, pending: true});
-    }
-  });
-  var tail = headings.filter(function(h){ return !h.isChapterTitle; }).pop();
-  pending.forEach(function(p){ p.id = tail ? tail.id : (intro ? intro.id : null); });
-  // fill ids for pending entries already pushed
-  entries.forEach(function(e, i){
-    if (!e.id){
-      for (var j = i + 1; j < entries.length; j++){
-        if (entries[j].id){ e.id = entries[j].id; break; }
-      }
-      if (!e.id) e.id = tail ? tail.id : (intro ? intro.id : null);
-    }
+  var n = 0;
+  headings.forEach(function(h){
+    if (h.isChapterTitle) entries.push({id: h.id, title: lang === 'en' ? 'Introduction' : 'Introducción', num: '·'});
+    else entries.push({id: h.id, title: h.title, num: 'P' + (++n)});
   });
   return entries;
 }
@@ -413,39 +398,62 @@ function loadChapterText(slug, lang){
     var body = $('readerBody');
     var headings = [];
     var seenProto = false;
+
+    function addPara(txt, type){
+      txt = txt.trim();
+      if (!txt) return;
+      var pel = document.createElement('p');
+      if (type === 'sec' || (txt.length < 40 && SUBHEADS.test(txt))){
+        pel.className = 'subhead';
+        pel.textContent = txt.replace(/:$/, '');
+      } else if (txt.startsWith('•')){
+        pel.className = 'bullet';
+        pel.textContent = txt.replace(/^•\s*/, '');
+      } else {
+        if (!seenProto) pel.className = 'intro-p';
+        pel.textContent = txt;
+      }
+      body.appendChild(pel);
+    }
+
+    function addHeading(title, label, isChapterTitle){
+      var id = 'sec-' + (headings.length + 1);
+      headings.push({id: id, title: title, isChapterTitle: isChapterTitle});
+      var el = document.createElement('h2');
+      el.className = 'h proto-head';
+      el.id = id;
+      if (isChapterTitle) el.classList.add('chapter-title');
+      else seenProto = true;
+      if (label){
+        var k = document.createElement('span');
+        k.className = 'ph-label';
+        k.textContent = label;
+        el.appendChild(k);
+      }
+      el.appendChild(document.createTextNode(title));
+      body.appendChild(el);
+    }
+
     data.paragraphs.forEach(function(p){
       if (p.type === 'h'){
-        var isChapterTitle = /^Capítulo \d/i.test(p.text);
-        var id = slugifyHeading(p.text, headings.length);
-        headings.push({id: id, title: p.text, isChapterTitle: isChapterTitle});
-        var el = document.createElement('h2');
-        el.className = 'h proto-head';
-        el.id = id;
-        if (isChapterTitle) el.classList.add('chapter-title');
-        else seenProto = true;
-        el.textContent = p.text;
-        body.appendChild(el);
+        addHeading(p.text, '', /^Cap[ií]tulo \d|^Chapter \d/i.test(p.text));
+      } else if (p.type === 'h2'){
+        var hp = splitProtoHeading(p.text);
+        addHeading(hp.title, hp.label, false);
+        // cuerpo pegado al título: "QUÉ NO HACER: • … • …"
+        var b = hp.body;
+        var lead = b.match(/^((?:QUÉ (?:NO )?HACER|CÓMO FUNCIONA|WHAT (?:NOT )?TO DO|HOW IT WORKS):?)\s*/);
+        if (lead){ addPara(lead[1], 'sec'); b = b.slice(lead[0].length); }
+        b.split(/\s+(?=•\s)/).forEach(function(piece){ addPara(piece); });
       } else {
-        var pel = document.createElement('p');
-        var txt = p.text;
-        if (SUBHEADS.test(txt)){
-          pel.className = 'subhead';
-          pel.textContent = txt;
-        } else if (txt.startsWith('•')){
-          pel.className = 'bullet';
-          pel.textContent = txt.replace(/^•\s*/, '');
-        } else if (!seenProto){
-          pel.className = 'intro-p';
-          pel.textContent = txt;
-        } else {
-          pel.textContent = txt;
-        }
-        body.appendChild(pel);
+        addPara(p.text, p.type);
       }
     });
-    buildTocDrawer(buildReaderToc(headings, meta ? meta.tracks : null));
+    buildTocDrawer(buildReaderToc(headings, lang));
     document.title = (meta ? meta.titulo : data.title) + ' · Lector · Protocolos';
-    window.scrollTo(0,0);
+    var target = location.hash && document.getElementById(location.hash.slice(1));
+    if (target) target.scrollIntoView({block: 'start'});
+    else window.scrollTo(0,0);
   }).catch(function(){
     wrap.hidden = false;
     wrap.innerHTML = '<div class="reader-empty">El texto de este capítulo aún no está disponible.</div>';
