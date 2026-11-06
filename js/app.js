@@ -411,12 +411,52 @@ function loadChapterText(slug, lang){
         pel.textContent = txt.replace(/:$/, '');
       } else if (txt.startsWith('•')){
         pel.className = 'bullet';
-        pel.textContent = txt.replace(/^•\s*/, '');
+        txt = txt.replace(/^•\s*/, '');
+        pel.appendChild(conTextoConNotas(txt));
       } else {
         if (!seenProto) pel.className = 'intro-p';
-        pel.textContent = txt;
+        pel.appendChild(conTextoConNotas(txt));
       }
       body.appendChild(pel);
+    }
+
+    /* [^N] → superíndice con enlace a la nota al final del capítulo */
+    function conTextoConNotas(txt){
+      var frag = document.createDocumentFragment();
+      var partes = txt.split(/(\[\^\d+\])/);
+      partes.forEach(function(parte){
+        var m = parte.match(/^\[\^(\d+)\]$/);
+        if (m){
+          var sup = document.createElement('sup');
+          sup.className = 'nota-ref';
+          var a = document.createElement('a');
+          a.href = '#nota-' + m[1];
+          a.textContent = m[1];
+          sup.appendChild(a);
+          frag.appendChild(sup);
+        } else if (parte){
+          frag.appendChild(document.createTextNode(parte));
+        }
+      });
+      return frag;
+    }
+
+    function agregarNotas(notas, lang){
+      if (!notas || !notas.length) return;
+      var h = document.createElement('h2');
+      h.className = 'h proto-head notas-titulo';
+      h.textContent = lang === 'es' ? 'Notas' : 'Notes';
+      body.appendChild(h);
+      var ol = document.createElement('ol');
+      ol.className = 'notas-lista';
+      notas.forEach(function(n){
+        var li = document.createElement('li');
+        li.id = 'nota-' + n.n;
+        li.className = 'nota-item';
+        li.textContent = n.texto;
+        ol.appendChild(li);
+      });
+      body.appendChild(ol);
     }
 
     function addHeading(title, label, isChapterTitle){
@@ -452,6 +492,7 @@ function loadChapterText(slug, lang){
         addPara(p.text, p.type);
       }
     });
+    agregarNotas(data.notas, lang);
     buildTocDrawer(buildReaderToc(headings, lang));
     document.title = (meta ? meta.titulo : data.title) + ' · Lector · Protocolos';
     var target = location.hash && document.getElementById(location.hash.slice(1));

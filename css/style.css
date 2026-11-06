@@ -575,3 +575,10 @@ footer.site-footer a{color:var(--ink-soft)}
 @media (prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 }
+
+/* — Notas del capítulo (lector) — */
+.reader-content sup.nota-ref{font-size:.62em;line-height:0;margin:0 .1em}
+.reader-content sup.nota-ref a{color:var(--accent-strong);text-decoration:none;font-weight:700}
+.reader-content h2.notas-titulo{border-top:2px solid var(--accent-strong);margin-top:2.4em}
+.reader-content ol.notas-lista{font-size:.78em;line-height:1.55;color:var(--ink-faint);padding-left:1.4em}
+.reader-content ol.notas-lista li{margin-bottom:.55em}
