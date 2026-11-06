@@ -384,6 +384,145 @@ function buildTocDrawer(entries){
   });
 }
 
+/* URLs de las referencias → enlaces cortos legibles (dominio/…) */
+function linkificar(txt){
+  return esc(txt).replace(/https?:\/\/[^\s<]+[^\s<.,;:)\]]/g, function(url){
+    var corto = url.replace(/^https?:\/\/(www\.)?/, '');
+    if (corto.length > 38) corto = corto.slice(0, 36) + '…';
+    return '<a href="' + url + '" target="_blank" rel="noopener">' + corto + '</a>';
+  });
+}
+
+/* ---------- notas: panel emergente ----------
+   Móvil: hoja inferior que sube sobre el texto (se cierra con ✕,
+   tocando fuera o deslizando hacia abajo).
+   Escritorio: tarjeta flotante junto al número, sin mover la página. */
+var notaPanel = (function(){
+  var notas = {}, lang = 'es', el, backdrop, refActiva = null, abierto = false;
+  var mqDesk = window.matchMedia('(min-width:768px)');
+
+  function build(){
+    if (el) return;
+    backdrop = document.createElement('div');
+    backdrop.className = 'nota-backdrop';
+    backdrop.hidden = true;
+    el = document.createElement('div');
+    el.className = 'nota-pop';
+    el.setAttribute('role', 'dialog');
+    el.setAttribute('aria-modal', 'false');
+    el.setAttribute('aria-labelledby', 'notaPopT');
+    el.tabIndex = -1;
+    el.hidden = true;
+    el.innerHTML =
+      '<div class="np-grip" aria-hidden="true"></div>' +
+      '<div class="np-head"><span class="np-t" id="notaPopT"></span>' +
+      '<button class="icon-btn np-close" type="button"><svg class="ico-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="m6.5 6.5 11 11m0-11-11 11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></div>' +
+      '<div class="np-body"></div>';
+    document.body.appendChild(backdrop);
+    document.body.appendChild(el);
+    el.querySelector('.np-close').addEventListener('click', function(){ close(true); });
+    backdrop.addEventListener('click', function(){ close(false); });
+
+    // deslizar hacia abajo para cerrar (móvil)
+    var y0 = null, dy = 0;
+    el.addEventListener('touchstart', function(e){
+      if (mqDesk.matches) return;
+      var body = el.querySelector('.np-body');
+      if (e.target.closest('.np-body') && body.scrollTop > 0) return;
+      y0 = e.touches[0].clientY; dy = 0; el.style.transition = 'none';
+    }, {passive:true});
+    el.addEventListener('touchmove', function(e){
+      if (y0 === null) return;
+      dy = Math.max(0, e.touches[0].clientY - y0);
+      el.style.transform = 'translateY(' + dy + 'px)';
+    }, {passive:true});
+    el.addEventListener('touchend', function(){
+      if (y0 === null) return;
+      el.style.transition = ''; el.style.transform = '';
+      if (dy > 80) close(false);
+      y0 = null;
+    });
+  }
+
+  function place(ref){
+    if (!mqDesk.matches){ el.style.left = el.style.top = el.style.width = ''; return; }
+    var r = ref.getBoundingClientRect();
+    var w = Math.min(440, window.innerWidth - 32);
+    var left = Math.min(Math.max(16, r.left + r.width / 2 - w / 2), window.innerWidth - w - 16);
+    el.style.width = w + 'px';
+    el.style.left = (left + window.scrollX) + 'px';
+    var h = el.offsetHeight;
+    var abajo = r.bottom + 10 + h < window.innerHeight || r.top - 10 - h < 70;
+    el.style.top = (abajo ? r.bottom + 10 : r.top - 10 - h) + window.scrollY + 'px';
+    el.classList.toggle('arriba', !abajo);
+  }
+
+  function open(n, ref){
+    if (!notas[n]) return false;
+    build();
+    if (refActiva) refActiva.classList.remove('activa');
+    refActiva = ref; ref.classList.add('activa');
+    el.querySelector('.np-t').textContent = (lang === 'es' ? 'Nota ' : 'Note ') + n;
+    el.querySelector('.np-close').setAttribute('aria-label', lang === 'es' ? 'Cerrar nota' : 'Close note');
+    var body = el.querySelector('.np-body');
+    body.innerHTML = linkificar(notas[n]);
+    body.scrollTop = 0;
+    el.hidden = false;
+    backdrop.hidden = mqDesk.matches;
+    document.body.classList.toggle('nota-abierta', !mqDesk.matches);
+    place(ref);
+    void el.offsetWidth; // fuerza el estado inicial para que la transición corra
+    el.classList.add('open'); backdrop.classList.add('open');
+    abierto = true;
+    el.focus({preventScroll:true});
+    return true;
+  }
+
+  function close(devolverFoco){
+    if (!abierto) return;
+    abierto = false;
+    el.classList.remove('open'); backdrop.classList.remove('open');
+    document.body.classList.remove('nota-abierta');
+    setTimeout(function(){ if (!abierto){ el.hidden = true; backdrop.hidden = true; } }, 220);
+    if (refActiva){
+      refActiva.classList.remove('activa');
+      if (devolverFoco) refActiva.focus({preventScroll:true});
+    }
+    refActiva = null;
+  }
+
+  document.addEventListener('click', function(e){
+    var a = e.target.closest('a[data-nota]');
+    if (a){
+      e.preventDefault();
+      if (abierto && refActiva === a){ close(false); return; }
+      open(a.dataset.nota, a);
+      return;
+    }
+    // ↩ en la lista final: volver al punto de lectura y resaltarlo
+    var back = e.target.closest('a.ni-back');
+    if (back){
+      e.preventDefault();
+      var ref = document.getElementById(back.getAttribute('href').slice(1));
+      if (ref){
+        ref.scrollIntoView({block:'center', behavior:'instant'});
+        ref.classList.remove('destello'); void ref.offsetWidth; ref.classList.add('destello');
+      }
+      return;
+    }
+    if (abierto && mqDesk.matches && !e.target.closest('.nota-pop')) close(false);
+  });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') close(true); });
+  window.addEventListener('resize', function(){ if (abierto) close(false); });
+
+  return {
+    setNotas: function(lista, l){
+      notas = {}; lang = l;
+      (lista || []).forEach(function(n){ notas[n.n] = n.texto; });
+    }
+  };
+})();
+
 function loadChapterText(slug, lang){
   var wrap = $('readerContent');
   fetch('assets/texto/' + lang + '/' + slug + '.json').then(function(r){
@@ -421,7 +560,9 @@ function loadChapterText(slug, lang){
       body.appendChild(pel);
     }
 
-    /* [^N] → superíndice con enlace a la nota al final del capítulo */
+    /* [^N] → superíndice; al tocarlo se abre la nota en un panel
+       sin mover la lectura (ver notaPanel más abajo). */
+    var refsVistas = {};
     function conTextoConNotas(txt){
       var frag = document.createDocumentFragment();
       var partes = txt.split(/(\[\^\d+\])/);
@@ -432,6 +573,10 @@ function loadChapterText(slug, lang){
           sup.className = 'nota-ref';
           var a = document.createElement('a');
           a.href = '#nota-' + m[1];
+          a.dataset.nota = m[1];
+          a.setAttribute('aria-haspopup', 'dialog');
+          a.setAttribute('aria-label', (lang === 'es' ? 'Nota ' : 'Note ') + m[1]);
+          if (!refsVistas[m[1]]){ a.id = 'ref-' + m[1]; refsVistas[m[1]] = true; }
           a.textContent = m[1];
           sup.appendChild(a);
           frag.appendChild(sup);
@@ -444,20 +589,28 @@ function loadChapterText(slug, lang){
 
     function agregarNotas(notas, lang){
       if (!notas || !notas.length) return;
-      var h = document.createElement('h2');
-      h.className = 'h proto-head notas-titulo';
-      h.textContent = lang === 'es' ? 'Notas' : 'Notes';
-      body.appendChild(h);
+      var es = lang === 'es';
+      var det = document.createElement('details');
+      det.className = 'notas-bloque';
+      det.id = 'notas';
+      var sum = document.createElement('summary');
+      sum.innerHTML = '<span class="nb-t">' + (es ? 'Notas y referencias' : 'Notes and references') + '</span>' +
+        '<span class="nb-n">' + notas.length + '</span>';
+      det.appendChild(sum);
       var ol = document.createElement('ol');
       ol.className = 'notas-lista';
       notas.forEach(function(n){
         var li = document.createElement('li');
         li.id = 'nota-' + n.n;
         li.className = 'nota-item';
-        li.textContent = n.texto;
+        li.innerHTML = '<span class="ni-n">' + n.n + '</span><span class="ni-t">' + linkificar(n.texto) + '</span>' +
+          (document.getElementById('ref-' + n.n)
+            ? '<a class="ni-back" href="#ref-' + n.n + '" aria-label="' + (es ? 'Volver al texto' : 'Back to text') + '">↩</a>'
+            : '');
         ol.appendChild(li);
       });
-      body.appendChild(ol);
+      det.appendChild(ol);
+      body.appendChild(det);
     }
 
     function addHeading(title, label, isChapterTitle){
@@ -494,9 +647,11 @@ function loadChapterText(slug, lang){
       }
     });
     agregarNotas(data.notas, lang);
+    notaPanel.setNotas(data.notas, lang);
     buildTocDrawer(buildReaderToc(headings, lang));
     document.title = (meta ? meta.titulo : data.title) + ' · Lector · Protocolos';
     var target = location.hash && document.getElementById(location.hash.slice(1));
+    if (target && target.closest('details')) target.closest('details').open = true;
     if (target) target.scrollIntoView({block: 'start'});
     else window.scrollTo(0,0);
   }).catch(function(){

@@ -577,8 +577,82 @@ footer.site-footer a{color:var(--ink-soft)}
 }
 
 /* — Notas del capítulo (lector) — */
-.reader-content sup.nota-ref{font-size:.62em;line-height:0;margin:0 .1em}
-.reader-content sup.nota-ref a{color:var(--accent-strong);text-decoration:none;font-weight:700}
-.reader-content h2.notas-titulo{border-top:2px solid var(--accent-strong);margin-top:2.4em}
-.reader-content ol.notas-lista{font-size:.78em;line-height:1.55;color:var(--ink-faint);padding-left:1.4em}
-.reader-content ol.notas-lista li{margin-bottom:.55em}
+/* número en el texto: pastilla pequeña con zona táctil amplia */
+.reader-content sup.nota-ref{font-size:.6em;line-height:0;margin:0 .12em;vertical-align:.55em;position:relative}
+.reader-content sup.nota-ref a{
+  display:inline-block;min-width:1.7em;padding:.18em .42em;border-radius:999px;
+  background:var(--accent-soft);color:var(--accent-strong);
+  font-family:var(--font-body);font-weight:700;line-height:1.2;text-align:center;
+  font-variant-numeric:tabular-nums;text-decoration:none;position:relative;
+  transition:background .15s,color .15s;
+}
+.reader-content sup.nota-ref a::after{content:"";position:absolute;inset:-12px -6px}
+.reader-content sup.nota-ref a:hover,
+.reader-content sup.nota-ref a.activa{background:var(--accent);color:#fff;text-decoration:none}
+.reader-content sup.nota-ref a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.reader-content sup.nota-ref a.destello{animation:nota-destello 1.6s ease}
+@keyframes nota-destello{0%,40%{background:var(--warm);color:#fff;box-shadow:0 0 0 6px var(--warm-soft)}100%{box-shadow:0 0 0 0 transparent}}
+
+/* panel de nota: hoja inferior (móvil) */
+.nota-backdrop{position:fixed;inset:0;z-index:76;background:rgba(10,22,30,.28);opacity:0;transition:opacity .2s ease}
+.nota-backdrop.open{opacity:1}
+.nota-pop{
+  position:fixed;left:0;right:0;bottom:0;z-index:77;
+  max-height:min(62vh,520px);display:flex;flex-direction:column;
+  background:var(--surface);color:var(--ink);
+  border-radius:20px 20px 0 0;border:1px solid var(--line);border-bottom:none;
+  box-shadow:0 -10px 40px rgba(10,22,30,.22);
+  padding-bottom:env(safe-area-inset-bottom,0);
+  transform:translateY(100%);transition:transform .24s cubic-bezier(.2,.8,.2,1);
+  outline:none;
+}
+.nota-pop.open{transform:translateY(0)}
+.nota-pop[hidden]{display:none}
+.nota-pop .np-grip{width:40px;height:4px;border-radius:4px;background:var(--line);margin:10px auto 0;flex:none}
+.nota-pop .np-head{display:flex;align-items:center;justify-content:space-between;padding:6px 10px 4px 20px;flex:none}
+.nota-pop .np-t{font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-strong)}
+.nota-pop .np-body{
+  overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;
+  padding:4px 20px 22px;font-size:.95rem;line-height:1.6;color:var(--ink-soft);
+  overflow-wrap:anywhere;
+}
+.nota-pop .np-body a,.notas-lista .ni-t a{color:var(--accent-strong);text-decoration:underline;text-decoration-color:color-mix(in srgb,var(--accent-strong) 35%,transparent);text-underline-offset:2px}
+body.nota-abierta{overflow:hidden}
+
+/* escritorio: tarjeta flotante junto al número */
+@media(min-width:768px){
+  .nota-pop{
+    position:absolute;right:auto;bottom:auto;max-height:min(46vh,420px);
+    border-radius:14px;border-bottom:1px solid var(--line);
+    box-shadow:var(--shadow),0 18px 50px rgba(10,22,30,.16);
+    transform:translateY(-4px);opacity:0;transition:opacity .16s ease,transform .16s ease;
+  }
+  .nota-pop.arriba{transform:translateY(4px)}
+  .nota-pop.open{opacity:1;transform:translateY(0)}
+  .nota-pop .np-grip{display:none}
+  .nota-pop .np-head{padding:10px 8px 2px 18px}
+  .nota-pop .np-body{padding:2px 18px 18px;font-size:.9rem}
+}
+@media(prefers-reduced-motion:reduce){.nota-pop,.nota-backdrop{transition:none}}
+
+/* lista completa al final: plegada por defecto */
+.reader-content details.notas-bloque{margin-top:2.6em;border-top:2px solid var(--accent-strong);padding-top:.4em}
+.notas-bloque summary{
+  display:flex;align-items:center;gap:.6em;cursor:pointer;list-style:none;
+  padding:.7em 0;font-family:var(--font-display);font-weight:600;font-size:1.05em;color:var(--ink);
+}
+.notas-bloque summary::-webkit-details-marker{display:none}
+.notas-bloque summary::after{
+  content:"";margin-left:auto;width:.55em;height:.55em;flex:none;
+  border-right:2px solid var(--ink-faint);border-bottom:2px solid var(--ink-faint);
+  transform:rotate(45deg) translateY(-25%);transition:transform .2s ease;
+}
+.notas-bloque[open] summary::after{transform:rotate(-135deg)}
+.notas-bloque .nb-n{font-family:var(--font-body);font-size:.68em;font-weight:700;color:var(--accent-strong);background:var(--accent-soft);border-radius:999px;padding:.15em .6em}
+.reader-content ol.notas-lista{list-style:none;font-size:.8em;line-height:1.6;color:var(--ink-soft);padding:0;margin-top:.4em}
+.reader-content ol.notas-lista li{display:flex;gap:.8em;align-items:baseline;padding:.65em 0;border-top:1px solid var(--line);overflow-wrap:anywhere;scroll-margin-top:130px}
+.reader-content ol.notas-lista li:target{background:var(--accent-soft);border-radius:8px}
+.notas-lista .ni-n{flex:none;min-width:2.2em;font-weight:700;color:var(--accent-strong);font-variant-numeric:tabular-nums}
+.notas-lista .ni-t{flex:1}
+.notas-lista .ni-back{flex:none;padding:.1em .45em;border-radius:6px;color:var(--ink-faint);font-size:1.1em;line-height:1}
+.notas-lista .ni-back:hover{background:var(--surface-2);color:var(--accent-strong);text-decoration:none}
