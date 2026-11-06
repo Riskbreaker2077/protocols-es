@@ -136,9 +136,9 @@ function renderChapter(slug){
     var url = 'assets/pdf/' + dir + '/' + ch.slug + '.pdf';
     if (ch.pdf && ch.pdf[dir]){
       b.href = url;
-      b.setAttribute('download','');
+      b.target = '_blank';
       b.innerHTML = '<span class="flag">' + dir.toUpperCase() + '</span> PDF';
-      b.setAttribute('aria-label', 'Descargar PDF en ' + name);
+      b.setAttribute('aria-label', 'Ver PDF en ' + name);
     } else {
       b.classList.add('unavailable');
       b.innerHTML = '<span class="flag">' + dir.toUpperCase() + '</span> PDF';
