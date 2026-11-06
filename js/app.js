@@ -7,6 +7,7 @@
 var DATA = null;
 var state = { chapter: null, trackIndex: -1, transcript: [], currentPara: -1 };
 var CH_ART = {
+  '00_introduccion':'assets/img/c0_introduccion.png',
   '01_dormir':'assets/img/c1_dormir.png',
   '02_ejercicio':'assets/img/c2_ejercicio.png',
   '03_control_del_estres':'assets/img/c3_estres.png',
@@ -70,7 +71,7 @@ function renderGrid(){
   var grid = $('chaptersGrid');
   if (!grid || !DATA) return;
   grid.innerHTML = '';
-  DATA.chapters.forEach(function(ch, i){ grid.appendChild(chapterCard(ch, i)); });
+  DATA.chapters.filter(function(ch){ return !ch.oculto; }).forEach(function(ch, i){ grid.appendChild(chapterCard(ch, i)); });
 }
 
 /* ---------- índice del lector ---------- */
