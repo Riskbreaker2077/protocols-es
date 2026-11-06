@@ -125,10 +125,13 @@ function renderChapter(slug){
     if (ch.pdf && ch.pdf[dir]){
       b.href = url;
       b.setAttribute('download','');
-      b.innerHTML = '<span class="flag">' + dir.toUpperCase() + '</span> PDF · ' + name;
+      b.innerHTML = '<span class="flag">' + dir.toUpperCase() + '</span> PDF';
+      b.setAttribute('aria-label', 'Descargar PDF en ' + name);
     } else {
       b.classList.add('unavailable');
-      b.innerHTML = '<span class="flag">' + dir.toUpperCase() + '</span> PDF · ' + name + ' <small>(próximamente)</small>';
+      b.innerHTML = '<span class="flag">' + dir.toUpperCase() + '</span> PDF';
+      b.setAttribute('aria-label', 'PDF en ' + name + ' (próximamente)');
+      b.title = 'Próximamente';
     }
     row.appendChild(b);
   });

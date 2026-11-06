@@ -30,13 +30,16 @@
     setFavicon();
   }
   apply();
+  function toggle(){
+    theme = theme === 'dark' ? 'light' : 'dark';
+    apply();
+    try { localStorage.setItem('protocolos-theme', theme); } catch(e){}
+  }
+  // Botón del encabezado (#themeToggle) y cualquier otro con data-theme-toggle
+  // (p. ej. el sol/luna del centro de la portada en el inicio).
   document.addEventListener('DOMContentLoaded', function(){
-    var btn = document.getElementById('themeToggle');
-    if (!btn) return;
-    btn.addEventListener('click', function(){
-      theme = theme === 'dark' ? 'light' : 'dark';
-      apply();
-      try { localStorage.setItem('protocolos-theme', theme); } catch(e){}
+    document.querySelectorAll('#themeToggle, [data-theme-toggle]').forEach(function(btn){
+      btn.addEventListener('click', toggle);
     });
   });
 })();

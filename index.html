@@ -6,87 +6,99 @@
 <title>Protocolos · Manual del cuerpo humano (proyecto no oficial)</title>
 <meta name="description" content="Sitio educativo sin ánimo de lucro con el texto y el audiolibro en español de 'Protocols: An Operator's Manual for the Human Body' de Andrew Huberman. Proyecto no oficial.">
 <meta name="theme-color" content="#19aad8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;900&display=swap">
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/portada.css">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='42' fill='%2319aad8'/></svg>">
 </head>
-<body>
-<header class="site-header">
-  <div class="container">
-    <a class="brand" href="index.html"><span class="dot"></span>Protocolos</a>
-    <nav class="main-nav" aria-label="Principal">
-      <a class="nav-link" href="index.html" aria-current="page">Inicio</a>
-      <a class="nav-link" href="biblioteca.html">Biblioteca</a>
-      <a class="nav-link" href="acerca.html">Acerca</a>
-      <a class="icon-btn" href="acerca.html#descargo" aria-label="Información y descargo de responsabilidad" title="Información">
-        <svg class="ico-svg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="8.2" r="1.2" fill="currentColor"/><rect x="11.1" y="10.8" width="1.8" height="6.4" rx="0.9" fill="currentColor"/></svg>
-      </a>
-      <button class="icon-btn" id="themeToggle" aria-label="Cambiar tema claro/oscuro">
-        <svg class="ico-svg ico-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
-        <svg class="ico-svg ico-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.7"/><g stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M18.5 5.5l-1.7 1.7M7.2 16.8l-1.7 1.7"/></g></svg>
-      </button>
-    </nav>
-  </div>
-</header>
+<body class="page-home">
 
-<main class="page-enter">
-  <section class="hero hero-deco container">
-    <h1>Protocolos: un manual práctico para el <em>cuerpo humano</em></h1>
-    <p class="lede">Texto y audiolibro de <em>Protocols: An Operator's Manual for the Human Body</em> de Andrew Huberman, organizados en 7 capítulos y 45 protocolos para dormir mejor, moverte, gestionar el estrés, comer, usar la luz, enfocarte y crecer. Léelo o escúchalo desde tu celular.</p>
-    <div class="hero-actions">
-      <a class="btn btn-primary" href="biblioteca.html">Explorar la biblioteca</a>
-      <a class="btn btn-ghost" href="lector.html?cap=01_dormir&lang=es">
-        <svg class="ico-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5.6C10.4 4.3 8.3 3.7 5.5 3.7c-.8 0-1.5.06-2.2.17v13.9c.7-.11 1.4-.17 2.2-.17 2.8 0 4.9.6 6.5 1.9 1.6-1.3 3.7-1.9 6.5-1.9.8 0 1.5.06 2.2.17V3.87a13 13 0 0 0-2.2-.17c-2.8 0-4.9.6-6.5 1.9Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M12 5.6v13.9" stroke="currentColor" stroke-width="1.7"/></svg>
-        Leer en línea
-      </a>
+<main class="home">
+  <h1 class="sr-only">Protocolos: un manual práctico para el cuerpo humano</h1>
+
+  <section class="cover" id="cover" aria-label="Portada">
+    <p class="cover-kicker" aria-hidden="true">Un manual práctico<br>para el cuerpo humano</p>
+
+    <div class="cube" id="cube">
+      <!-- Cada ficha: cara frontal = letra de PROTOCOLS, cara trasera = destino.
+           data-axis alterna el eje del giro (y/x) para el efecto de cubo. -->
+      <div class="tile" data-axis="y" style="--i:0">
+        <span class="face front" aria-hidden="true">P</span>
+        <a class="face back ch" href="biblioteca.html?cap=01_dormir" tabindex="-1">
+          <img src="assets/img/c1_dormir.png" alt=""><span class="ch-n">1</span><span class="ch-t">Dormir</span>
+        </a>
+      </div>
+      <div class="tile" data-axis="x" style="--i:1">
+        <span class="face front" aria-hidden="true">R</span>
+        <a class="face back ch" href="biblioteca.html?cap=02_ejercicio" tabindex="-1">
+          <img src="assets/img/c2_ejercicio.png" alt=""><span class="ch-n">2</span><span class="ch-t">Ejercicio</span>
+        </a>
+      </div>
+      <div class="tile" data-axis="y" style="--i:2">
+        <span class="face front" aria-hidden="true">O</span>
+        <a class="face back ch" href="biblioteca.html?cap=03_control_del_estres" tabindex="-1">
+          <img src="assets/img/c3_estres.png" alt=""><span class="ch-n">3</span><span class="ch-t">Control del estrés</span>
+        </a>
+      </div>
+      <div class="tile" data-axis="x" style="--i:1">
+        <span class="face front" aria-hidden="true">T</span>
+        <a class="face back ch" href="biblioteca.html?cap=04_nutricion" tabindex="-1">
+          <img src="assets/img/c4_nutricion.png" alt=""><span class="ch-n">4</span><span class="ch-t">Nutrición</span>
+        </a>
+      </div>
+      <div class="tile tile-center" data-axis="y" style="--i:2">
+        <span class="face front" aria-hidden="true"><span class="orb"></span></span>
+        <button class="face back theme-orb" type="button" data-theme-toggle tabindex="-1" aria-label="Cambiar tema claro/oscuro">
+          <span class="orb">
+            <svg class="orb-ico orb-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.4" fill="none" stroke="currentColor" stroke-width="1.8"/><g stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 2.6v2.3M12 19.1v2.3M2.6 12h2.3M19.1 12h2.3M5.4 5.4 7 7M17 17l1.6 1.6M18.6 5.4 17 7M7 17l-1.6 1.6"/></g></svg>
+            <svg class="orb-ico orb-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+          </span>
+        </button>
+      </div>
+      <div class="tile" data-axis="x" style="--i:3">
+        <span class="face front" aria-hidden="true">C</span>
+        <a class="face back ch" href="biblioteca.html?cap=05_luz" tabindex="-1">
+          <img src="assets/img/c5_luz.png" alt=""><span class="ch-n">5</span><span class="ch-t">Luz</span>
+        </a>
+      </div>
+      <div class="tile" data-axis="y" style="--i:2">
+        <span class="face front" aria-hidden="true">O</span>
+        <a class="face back ch" href="biblioteca.html?cap=06_enfoque" tabindex="-1">
+          <img src="assets/img/c6_enfoque.png" alt=""><span class="ch-n">6</span><span class="ch-t">Enfoque</span>
+        </a>
+      </div>
+      <div class="tile" data-axis="x" style="--i:3">
+        <span class="face front" aria-hidden="true">L</span>
+        <a class="face back ch" href="biblioteca.html?cap=07_crecimiento_personal" tabindex="-1">
+          <img src="assets/img/c7_crecimiento.png" alt=""><span class="ch-n">7</span><span class="ch-t">Crecimiento personal</span>
+        </a>
+      </div>
+      <div class="tile" data-axis="y" style="--i:4">
+        <span class="face front" aria-hidden="true">S</span>
+        <a class="face back more" href="acerca.html#descargo" tabindex="-1">
+          <span class="more-t">Ver más</span>
+          <svg class="more-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6.5 18.5 12 13 17.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+
+      <!-- Mientras se ve la portada, toda la cuadrícula es un solo botón. -->
+      <button class="cube-open" id="cubeOpen" type="button" aria-label="Abrir la portada y ver los 7 capítulos"></button>
     </div>
+
+    <p class="cover-byline">Basado en el libro de<br>Andrew D. Huberman</p>
   </section>
 
-  <section class="block container">
-    <h2>Los 7 capítulos</h2>
-    <p class="sub">Cada capítulo incluye el texto completo para leer en la página, el PDF (inglés y español) y el audio por protocolo.</p>
-    <div class="chapters-grid" id="chaptersGrid"></div>
-  </section>
-
-  <section class="block container">
-    <h2>Apoya al autor</h2>
-    <p class="sub">Este proyecto es gratuito y sin ánimo de lucro. Si te resulta útil, considera comprar el libro o visitar los recursos oficiales.</p>
-    <div class="author-links">
-      <a class="author-link" href="https://www.amazon.com/dp/B0D3JFXBFW" target="_blank" rel="noopener">
-        <span class="ico"><svg class="ico-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 4.5h2l1.2 10.2a1.6 1.6 0 0 0 1.6 1.4h8.1a1.6 1.6 0 0 0 1.6-1.3l1.3-6.8H6.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9.4" cy="19.5" r="1.5" fill="currentColor"/><circle cx="15.9" cy="19.5" r="1.5" fill="currentColor"/></svg></span>
-        <span><span class="al-t">Comprar el libro en Amazon</span><br><span class="al-s">Edición Kindle y física del original</span></span>
-        <span class="go"><svg class="ico-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9.5 7H17v7.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-      <a class="author-link" href="https://www.hubermanlab.com" target="_blank" rel="noopener">
-        <span class="ico"><svg class="ico-svg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="1.7"/><ellipse cx="12" cy="12" rx="3.8" ry="8.6" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3.6 12h16.8" stroke="currentColor" stroke-width="1.7"/></svg></span>
-        <span><span class="al-t">Web oficial de Andrew Huberman</span><br><span class="al-s">hubermanlab.com</span></span>
-        <span class="go"><svg class="ico-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9.5 7H17v7.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-      <a class="author-link" href="https://www.hubermanlab.com/protocols-book" target="_blank" rel="noopener">
-        <span class="ico"><svg class="ico-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5h5.2a2 2 0 0 1 2 2V19a1.6 1.6 0 0 0-1.6-1.6H5Zm14 0h-5.2a2 2 0 0 0-2 2V19a1.6 1.6 0 0 1 1.6-1.6H19Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></span>
-        <span><span class="al-t">Página oficial del libro</span><br><span class="al-s">Recursos y protocolos del autor</span></span>
-        <span class="go"><svg class="ico-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9.5 7H17v7.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-    </div>
-  </section>
+  <p class="cover-hint" id="coverHint" aria-hidden="true">Toca la portada</p>
+  <p class="home-links">
+    <a href="acerca.html">Proyecto no oficial · Acerca</a>
+    <a href="https://www.amazon.com/dp/B0D3JFXBFW" target="_blank" rel="noopener">Compra el libro original</a>
+  </p>
 </main>
-
-<footer class="site-footer">
-  <div class="container">
-    <p>Proyecto no oficial, educativo y sin ánimo de lucro. <em>Protocols: An Operator's Manual for the Human Body</em> © Andrew Huberman. Todos los derechos reservados a su autor y editorial.</p>
-    <p class="footer-links">
-      <a href="https://www.amazon.com/dp/B0D3JFXBFW" target="_blank" rel="noopener">Compra el libro original</a>
-      <a href="acerca.html">Acerca de este proyecto</a>
-    </p>
-  </div>
-</footer>
-
-<nav class="tabbar" aria-label="Navegación principal">
-  <a href="index.html" aria-current="page"><span class="tab-ico"><svg class="ico-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.2 12 4l8 7.2M6 9.8V20h4.6v-5h2.8v5H18V9.8" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Inicio</a>
-  <a href="biblioteca.html"><span class="tab-ico"><svg class="ico-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5h5.2a2 2 0 0 1 2 2V19a1.6 1.6 0 0 0-1.6-1.6H5Zm14 0h-5.2a2 2 0 0 0-2 2V19a1.6 1.6 0 0 1 1.6-1.6H19Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></span>Biblioteca</a>
-  <a href="acerca.html"><span class="tab-ico"><svg class="ico-svg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="8.2" r="1.2" fill="currentColor"/><rect x="11.1" y="10.8" width="1.8" height="6.4" rx="0.9" fill="currentColor"/></svg></span>Acerca</a>
-</nav>
 
 <script src="js/theme.js"></script>
 <script src="js/app.js"></script>
+<script src="js/portada.js"></script>
 </body>
 </html>
