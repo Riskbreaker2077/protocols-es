@@ -228,7 +228,7 @@
         },
         {
           "id": "01_del_estres_haz_de_uno_a_tres_suspiros_fi",
-          "titulo": "DEL ESTRÉS Haz de uno a tres suspiros fisiológicos para reducir rápido el estrés",
+          "titulo": "Haz de uno a tres suspiros fisiológicos para reducir rápido el estrés",
           "audio": "assets/audio/03_control_del_estres/01_del_estres_haz_de_uno_a_tres_suspiros_fi.mp3",
           "transcript": "assets/audio/03_control_del_estres/01_del_estres_haz_de_uno_a_tres_suspiros_fi.md",
           "available": true,
@@ -236,7 +236,7 @@
         },
         {
           "id": "02_del_estres_usa_la_exposicion_deliberada",
-          "titulo": "DEL ESTRÉS Usa la exposición deliberada al frío para elevar tu umbral de estrés",
+          "titulo": "Usa la exposición deliberada al frío para elevar tu umbral de estrés",
           "audio": "assets/audio/03_control_del_estres/02_del_estres_usa_la_exposicion_deliberada.mp3",
           "transcript": "assets/audio/03_control_del_estres/02_del_estres_usa_la_exposicion_deliberada.md",
           "available": true,
@@ -244,7 +244,7 @@
         },
         {
           "id": "03_del_estres_practica_el_descanso_profundo",
-          "titulo": "DEL ESTRÉS Practica el descanso profundo sin sueño (NSDR) para amortiguar el estrés",
+          "titulo": "Practica el descanso profundo sin sueño (NSDR) para amortiguar el estrés",
           "audio": "assets/audio/03_control_del_estres/03_del_estres_practica_el_descanso_profundo.mp3",
           "transcript": "assets/audio/03_control_del_estres/03_del_estres_practica_el_descanso_profundo.md",
           "available": true,
@@ -252,7 +252,7 @@
         },
         {
           "id": "04_del_estres_haz_una_micromeditacion_nada",
-          "titulo": "DEL ESTRÉS Haz una micromeditación nada más despertar",
+          "titulo": "Haz una micromeditación nada más despertar",
           "audio": "assets/audio/03_control_del_estres/04_del_estres_haz_una_micromeditacion_nada.mp3",
           "transcript": "assets/audio/03_control_del_estres/04_del_estres_haz_una_micromeditacion_nada.md",
           "available": true,
@@ -260,7 +260,7 @@
         },
         {
           "id": "05_del_estres_impulsa_tu_pico_matutino_de_c",
-          "titulo": "DEL ESTRÉS Impulsa tu pico matutino de cortisol y catecolaminas",
+          "titulo": "Impulsa tu pico matutino de cortisol y catecolaminas",
           "audio": "assets/audio/03_control_del_estres/05_del_estres_impulsa_tu_pico_matutino_de_c.mp3",
           "transcript": "assets/audio/03_control_del_estres/05_del_estres_impulsa_tu_pico_matutino_de_c.md",
           "available": false,
@@ -268,7 +268,7 @@
         },
         {
           "id": "06_del_estres_considera_suplementos_especif",
-          "titulo": "DEL ESTRÉS Considera suplementos específicos para contrarrestar el exceso de estrés",
+          "titulo": "Considera suplementos específicos para contrarrestar el exceso de estrés",
           "audio": "assets/audio/03_control_del_estres/06_del_estres_considera_suplementos_especif.mp3",
           "transcript": "assets/audio/03_control_del_estres/06_del_estres_considera_suplementos_especif.md",
           "available": false,
@@ -500,7 +500,7 @@
         },
         {
           "id": "01_personal_reemplaza_la_divagacion_mental",
-          "titulo": "PERSONAL Reemplaza la divagación mental por una conciencia anclada en el presente",
+          "titulo": "Reemplaza la divagación mental por una conciencia anclada en el presente",
           "audio": "assets/audio/07_crecimiento_personal/01_personal_reemplaza_la_divagacion_mental.mp3",
           "transcript": "assets/audio/07_crecimiento_personal/01_personal_reemplaza_la_divagacion_mental.md",
           "available": false,
@@ -508,7 +508,7 @@
         },
         {
           "id": "02_personal_aplica_la_guia_de_james_hollis",
-          "titulo": "PERSONAL Aplica la guía de James Hollis para forjar tu mejor vida",
+          "titulo": "Aplica la guía de James Hollis para forjar tu mejor vida",
           "audio": "assets/audio/07_crecimiento_personal/02_personal_aplica_la_guia_de_james_hollis.mp3",
           "transcript": "assets/audio/07_crecimiento_personal/02_personal_aplica_la_guia_de_james_hollis.md",
           "available": false,
@@ -516,7 +516,7 @@
         },
         {
           "id": "03_personal_resuelve_las_heridas_internas_m",
-          "titulo": "PERSONAL Resuelve las heridas internas mediante la escritura expresiva",
+          "titulo": "Resuelve las heridas internas mediante la escritura expresiva",
           "audio": "assets/audio/07_crecimiento_personal/03_personal_resuelve_las_heridas_internas_m.mp3",
           "transcript": "assets/audio/07_crecimiento_personal/03_personal_resuelve_las_heridas_internas_m.md",
           "available": false,
@@ -524,7 +524,7 @@
         },
         {
           "id": "04_personal_reencuadra_la_perdida_para_atra",
-          "titulo": "PERSONAL Reencuadra la pérdida para atravesar el duelo con entereza",
+          "titulo": "Reencuadra la pérdida para atravesar el duelo con entereza",
           "audio": "assets/audio/07_crecimiento_personal/04_personal_reencuadra_la_perdida_para_atra.mp3",
           "transcript": "assets/audio/07_crecimiento_personal/04_personal_reencuadra_la_perdida_para_atra.md",
           "available": false,
