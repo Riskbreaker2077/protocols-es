@@ -223,40 +223,40 @@
           "titulo": "Introducción del capítulo",
           "audio": "assets/audio/03_control_del_estres/00_introduccion.mp3",
           "transcript": "assets/audio/03_control_del_estres/00_introduccion.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 1883
         },
         {
           "id": "01_del_estres_haz_de_uno_a_tres_suspiros_fi",
           "titulo": "DEL ESTRÉS Haz de uno a tres suspiros fisiológicos para reducir rápido el estrés",
           "audio": "assets/audio/03_control_del_estres/01_del_estres_haz_de_uno_a_tres_suspiros_fi.mp3",
           "transcript": "assets/audio/03_control_del_estres/01_del_estres_haz_de_uno_a_tres_suspiros_fi.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 917
         },
         {
           "id": "02_del_estres_usa_la_exposicion_deliberada",
           "titulo": "DEL ESTRÉS Usa la exposición deliberada al frío para elevar tu umbral de estrés",
           "audio": "assets/audio/03_control_del_estres/02_del_estres_usa_la_exposicion_deliberada.mp3",
           "transcript": "assets/audio/03_control_del_estres/02_del_estres_usa_la_exposicion_deliberada.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 2075
         },
         {
           "id": "03_del_estres_practica_el_descanso_profundo",
           "titulo": "DEL ESTRÉS Practica el descanso profundo sin sueño (NSDR) para amortiguar el estrés",
           "audio": "assets/audio/03_control_del_estres/03_del_estres_practica_el_descanso_profundo.mp3",
           "transcript": "assets/audio/03_control_del_estres/03_del_estres_practica_el_descanso_profundo.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 511
         },
         {
           "id": "04_del_estres_haz_una_micromeditacion_nada",
           "titulo": "DEL ESTRÉS Haz una micromeditación nada más despertar",
           "audio": "assets/audio/03_control_del_estres/04_del_estres_haz_una_micromeditacion_nada.mp3",
           "transcript": "assets/audio/03_control_del_estres/04_del_estres_haz_una_micromeditacion_nada.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 409
         },
         {
           "id": "05_del_estres_impulsa_tu_pico_matutino_de_c",
@@ -459,8 +459,8 @@
           "titulo": "Da prioridad al sueño la noche posterior a una sesión de aprendizaje",
           "audio": "assets/audio/06_enfoque/04_da_prioridad_al_sueno_la_noche_posterior.mp3",
           "transcript": "assets/audio/06_enfoque/04_da_prioridad_al_sueno_la_noche_posterior.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 84
         },
         {
           "id": "05_incorpora_microdescansos_en_tus_sesiones",
