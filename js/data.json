@@ -459,8 +459,8 @@
           "titulo": "Da prioridad al sueño la noche posterior a una sesión de aprendizaje",
           "audio": "assets/audio/06_enfoque/04_da_prioridad_al_sueno_la_noche_posterior.mp3",
           "transcript": "assets/audio/06_enfoque/04_da_prioridad_al_sueno_la_noche_posterior.md",
-          "available": true,
-          "duration": 84
+          "available": false,
+          "duration": null
         },
         {
           "id": "05_incorpora_microdescansos_en_tus_sesiones",
