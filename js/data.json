@@ -495,8 +495,8 @@
           "titulo": "Introducción del capítulo",
           "audio": "assets/audio/07_crecimiento_personal/00_introduccion.mp3",
           "transcript": "assets/audio/07_crecimiento_personal/00_introduccion.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 814
         },
         {
           "id": "01_personal_reemplaza_la_divagacion_mental",
