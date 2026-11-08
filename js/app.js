@@ -61,7 +61,7 @@ function renderContinuar(){
     e.preventDefault();
     if (esAudio) sessionStorage.setItem('pe_autoresume', JSON.stringify({ slug: capSlug, i: last.i }));
     location.href = esAudio
-      ? 'index.html?cap=' + encodeURIComponent(capSlug)
+      ? 'biblioteca.html?cap=' + encodeURIComponent(capSlug)
       : 'lector.html?cap=' + encodeURIComponent(capSlug) + '&lang=' + ultimoL.lang;
   });
 }
@@ -776,6 +776,11 @@ document.addEventListener('DOMContentLoaded', function(){
     renderReaderToc();
     var params = new URLSearchParams(location.search);
     var cap = params.get('cap');
+    // compatibilidad: enlaces viejos index.html?cap= → la página de capítulo es biblioteca
+    if (cap && !$('chapterView') && $('cover')){
+      location.replace('biblioteca.html?cap=' + encodeURIComponent(cap));
+      return;
+    }
     if (cap && $('chapterView')){
       renderChapter(cap);
       // tarjeta "Continuar" → reanudar la pista guardada
