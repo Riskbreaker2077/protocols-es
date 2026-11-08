@@ -391,24 +391,24 @@
           "titulo": "Evita exponerte a luces brillantes desde una hora antes de acostarte",
           "audio": "assets/audio/05_luz/03_evita_exponerte_a_luces_brillantes_desde.mp3",
           "transcript": "assets/audio/05_luz/03_evita_exponerte_a_luces_brillantes_desde.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 1367
         },
         {
           "id": "04_expon_al_sol_la_piel_de_la_parte_superio",
           "titulo": "Expón al sol la piel de la parte superior e inferior del cuerpo durante el día",
           "audio": "assets/audio/05_luz/04_expon_al_sol_la_piel_de_la_parte_superio.mp3",
           "transcript": "assets/audio/05_luz/04_expon_al_sol_la_piel_de_la_parte_superio.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 1142
         },
         {
           "id": "05_expon_la_piel_y_los_ojos_a_la_luz_de_lon",
           "titulo": "Expón la piel y los ojos a la luz de longitud de onda larga (roja, infrarroja cercana e infrarroja)",
           "audio": "assets/audio/05_luz/05_expon_la_piel_y_los_ojos_a_la_luz_de_lon.mp3",
           "transcript": "assets/audio/05_luz/05_expon_la_piel_y_los_ojos_a_la_luz_de_lon.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 1489
         }
       ],
       "pdf": {
