@@ -6,6 +6,65 @@
 
 var DATA = null;
 var state = { chapter: null, trackIndex: -1, transcript: [], currentPara: -1 };
+
+/* ---------- avance de lectura (localStorage, por visitante/dispositivo) ---------- */
+var PROGRESO = {
+  leido: JSON.parse(localStorage.getItem('pe_leido') || '{}'),
+  audioPos: JSON.parse(localStorage.getItem('pe_audio_pos') || '{}'),
+  last: null
+};
+try { PROGRESO.last = JSON.parse(localStorage.getItem('pe_audio_last') || 'null'); } catch (e) {}
+function _guarda(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+function guardaLectura(cap, lang, pct){
+  PROGRESO.leido[cap + ':' + lang] = { p: Math.round(pct), ts: Date.now() };
+  _guarda('pe_leido', PROGRESO.leido);
+}
+function guardaAudio(slug, i, t){
+  if (!slug || i < 0 || !isFinite(t)) return;
+  PROGRESO.audioPos[slug + '/' + i] = Math.round(t);
+  PROGRESO.last = { slug: slug, i: i, t: Math.round(t), ts: Date.now() };
+  _guarda('pe_audio_pos', PROGRESO.audioPos);
+  _guarda('pe_audio_last', PROGRESO.last);
+}
+function renderContinuar(){
+  var ancla = document.querySelector('.home-links') || $('chaptersGrid');
+  if (!ancla || !DATA) return;
+  var last = PROGRESO.last, ultimoL = null, ultTs = 0, k;
+  for (k in PROGRESO.leido){
+    if (PROGRESO.leido[k].ts > ultTs){
+      ultTs = PROGRESO.leido[k].ts;
+      ultimoL = { cap: k.split(':')[0], lang: k.split(':')[1], p: PROGRESO.leido[k].p };
+    }
+  }
+  if (!last && !ultimoL) return;
+  var esAudio = last && (!ultimoL || last.ts >= ultTs);
+  var capSlug = esAudio ? last.slug : ultimoL.cap;
+  var ch = null;
+  for (var j = 0; j < DATA.chapters.length; j++){ if (DATA.chapters[j].slug === capSlug){ ch = DATA.chapters[j]; break; } }
+  if (!ch) return;
+  var card = document.getElementById('continuarCard');
+  if (!card){
+    card = document.createElement('div');
+    card.id = 'continuarCard';
+    card.className = 'continue-card';
+    ancla.parentNode.insertBefore(card, ancla);
+  }
+  var detalle = esAudio
+    ? 'Escuchaste: ' + esc(ch.tracks[last.i] ? ch.tracks[last.i].titulo : 'pista') + ' · min ' + fmt(last.t)
+    : 'Leyendo: ' + ultimoL.p + '% del texto · ' + (ultimoL.lang === 'es' ? 'en español' : 'in English');
+  card.innerHTML =
+    '<div class="cc-txt"><span class="cc-k">Continúa donde quedaste</span>' +
+    '<strong>' + esc(ch.titulo) + '</strong>' +
+    '<span class="cc-d">' + detalle + '</span></div>' +
+    '<a class="cc-btn" id="ccBtn" href="#">Continuar</a>';
+  card.querySelector('#ccBtn').addEventListener('click', function(e){
+    e.preventDefault();
+    if (esAudio) sessionStorage.setItem('pe_autoresume', JSON.stringify({ slug: capSlug, i: last.i }));
+    location.href = esAudio
+      ? 'index.html?cap=' + encodeURIComponent(capSlug)
+      : 'lector.html?cap=' + encodeURIComponent(capSlug) + '&lang=' + ultimoL.lang;
+  });
+}
 var CH_ART = {
   '00_introduccion':'assets/img/c0_introduccion.png',
   '01_dormir':'assets/img/c1_dormir.png',
@@ -191,6 +250,14 @@ function playTrack(i){
   state.trackIndex = i;
   var a = ensureAudio();
   a.src = t.audio;
+  // reanudar donde quedó esta pista (si guardó >20 s y no está al final)
+  var _pos = PROGRESO.audioPos[state.chapter.slug + '/' + i] || 0;
+  if (_pos > 20){
+    a.addEventListener('loadedmetadata', function _reanuda(){
+      a.removeEventListener('loadedmetadata', _reanuda);
+      if (isFinite(a.duration) && _pos < a.duration - 10) a.currentTime = _pos;
+    });
+  }
   a.playbackRate = SPEEDS[speedIdx];
   a.play().catch(function(){});
   $('playerTitle').textContent = t.titulo;
@@ -279,6 +346,12 @@ function seek(sec){
 function onTimeUpdate(){
   var a = ensureAudio();
   if (!isFinite(a.duration) || a.duration <= 0) return;
+  // guardar avance cada ~5 s (y al pausar, vía listener de pause)
+  var _ahora = Date.now();
+  if (!state._ls || _ahora - state._ls > 5000){
+    state._ls = _ahora;
+    guardaAudio(state.chapter && state.chapter.slug, state.trackIndex, a.currentTime);
+  }
   var pct = (a.currentTime / a.duration) * 100;
   $('progressFill').style.width = pct + '%';
   $('progressBar').setAttribute('aria-valuenow', pct.toFixed(1));
@@ -343,6 +416,14 @@ function readerInit(){
     var h = document.documentElement;
     var max = h.scrollHeight - h.clientHeight;
     rp.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + '%';
+    // guardar avance de lectura cada ~4 s
+    if (reader.slug && max > 0){
+      var _a = Date.now();
+      if (!reader._ls || _a - reader._ls > 4000){
+        reader._ls = _a;
+        guardaLectura(reader.slug, reader.lang, (h.scrollTop / max) * 100);
+      }
+    }
   }, {passive:true});
 
   if (DATA && DATA.chapters.length){ renderReaderToc(); }
@@ -669,7 +750,17 @@ function loadChapterText(slug, lang){
     var target = location.hash && document.getElementById(location.hash.slice(1));
     if (target && target.closest('details')) target.closest('details').open = true;
     if (target) target.scrollIntoView({block: 'start'});
-    else window.scrollTo(0,0);
+    else {
+      // reanudar la posición de lectura guardada (si >2% y <98%)
+      var _lp = (PROGRESO.leido[slug + ':' + lang] || {}).p || 0;
+      if (_lp > 2 && _lp < 98){
+        setTimeout(function(){
+          var h = document.documentElement;
+          var max = h.scrollHeight - h.clientHeight;
+          if (max > 0) window.scrollTo(0, max * _lp / 100);
+        }, 80);
+      } else window.scrollTo(0, 0);
+    }
   }).catch(function(){
     wrap.hidden = false;
     wrap.innerHTML = '<div class="reader-empty">El texto de este capítulo aún no está disponible.</div>';
@@ -681,10 +772,21 @@ document.addEventListener('DOMContentLoaded', function(){
   loadData(function(data){
     DATA = data;
     renderGrid();
+    renderContinuar();
     renderReaderToc();
     var params = new URLSearchParams(location.search);
     var cap = params.get('cap');
-    if (cap && $('chapterView')) renderChapter(cap);
+    if (cap && $('chapterView')){
+      renderChapter(cap);
+      // tarjeta "Continuar" → reanudar la pista guardada
+      try {
+        var ar = JSON.parse(sessionStorage.getItem('pe_autoresume') || 'null');
+        if (ar && ar.slug === cap){
+          playTrack(ar.i);
+          sessionStorage.removeItem('pe_autoresume');
+        }
+      } catch (e) {}
+    }
     if (cap && $('readerContent')) loadChapterText(cap, reader.lang);
   });
   readerInit();
@@ -738,6 +840,15 @@ document.addEventListener('DOMContentLoaded', function(){
     });
     var a = $('audio');
     a.addEventListener('timeupdate', onTimeUpdate);
+    a.addEventListener('ended', function(){
+      if (state.chapter && state.trackIndex >= 0){
+        delete PROGRESO.audioPos[state.chapter.slug + '/' + state.trackIndex];
+        _guarda('pe_audio_pos', PROGRESO.audioPos);
+      }
+    });
+    a.addEventListener('pause', function(){
+      if (state.chapter && state.trackIndex >= 0) guardaAudio(state.chapter.slug, state.trackIndex, a.currentTime);
+    });
     a.addEventListener('ended', nextTrack);
     a.addEventListener('play', function(){ setPlayingUI(true); });
     a.addEventListener('pause', function(){ setPlayingUI(false); });

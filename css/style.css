@@ -221,7 +221,7 @@ section.block .sub{color:var(--ink-soft);margin-bottom:24px}
 @media(min-width:640px){.chapters-grid{grid-template-columns:repeat(2,1fr);gap:16px}}
 @media(min-width:960px){.chapters-grid{grid-template-columns:repeat(3,1fr)}}
 .chapter-card{
-  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+   background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
   overflow:hidden;display:flex;flex-direction:column;text-decoration:none;
   transition:transform .2s,box-shadow .2s,border-color .2s;
 }
@@ -656,3 +656,19 @@ body.nota-abierta{overflow:hidden}
 .notas-lista .ni-t{flex:1}
 .notas-lista .ni-back{flex:none;padding:.1em .45em;border-radius:6px;color:var(--ink-faint);font-size:1.1em;line-height:1}
 .notas-lista .ni-back:hover{background:var(--surface-2);color:var(--accent-strong);text-decoration:none}
+
+/* ---------- tarjeta "Continúa donde quedaste" ---------- */
+.continue-card{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  background:var(--accent-soft);border:1px solid var(--accent);border-radius:var(--radius);
+  padding:14px 16px;margin:0 0 18px;max-width:680px;
+}
+.continue-card .cc-txt{display:flex;flex-direction:column;gap:3px;min-width:0}
+.continue-card .cc-k{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-strong)}
+.continue-card strong{font-size:1.02rem;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.continue-card .cc-d{font-size:.82rem;color:var(--ink-soft);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.continue-card .cc-btn{
+  flex-shrink:0;background:var(--accent);color:#fff;text-decoration:none;font-weight:600;
+  padding:9px 18px;border-radius:999px;font-size:.9rem;transition:background .2s;
+}
+.continue-card .cc-btn:hover{background:var(--accent-strong)}
