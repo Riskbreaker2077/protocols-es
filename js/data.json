@@ -15,8 +15,8 @@
           "titulo": "Introducción",
           "audio": "assets/audio/00_introduccion/00_introduccion.mp3",
           "transcript": "assets/audio/00_introduccion/00_introduccion.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 2824
         }
       ]
     },
@@ -263,16 +263,16 @@
           "titulo": "Impulsa tu pico matutino de cortisol y catecolaminas",
           "audio": "assets/audio/03_control_del_estres/05_del_estres_impulsa_tu_pico_matutino_de_c.mp3",
           "transcript": "assets/audio/03_control_del_estres/05_del_estres_impulsa_tu_pico_matutino_de_c.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 1385
         },
         {
           "id": "06_del_estres_considera_suplementos_especif",
           "titulo": "Considera suplementos específicos para contrarrestar el exceso de estrés",
           "audio": "assets/audio/03_control_del_estres/06_del_estres_considera_suplementos_especif.mp3",
           "transcript": "assets/audio/03_control_del_estres/06_del_estres_considera_suplementos_especif.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 1216
         }
       ],
       "pdf": {
@@ -291,64 +291,64 @@
           "titulo": "Introducción del capítulo",
           "audio": "assets/audio/04_nutricion/00_introduccion.mp3",
           "transcript": "assets/audio/04_nutricion/00_introduccion.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 5120
         },
         {
           "id": "01_que_el_90_por_ciento_o_mas_de_lo_que_com",
           "titulo": "Que el 90 por ciento o más de lo que comas sean alimentos sin procesar o mínimamente procesados",
           "audio": "assets/audio/04_nutricion/01_que_el_90_por_ciento_o_mas_de_lo_que_com.mp3",
           "transcript": "assets/audio/04_nutricion/01_que_el_90_por_ciento_o_mas_de_lo_que_com.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 894
         },
         {
           "id": "02_mantente_bien_hidratado",
           "titulo": "Mantente bien hidratado",
           "audio": "assets/audio/04_nutricion/02_mantente_bien_hidratado.mp3",
           "transcript": "assets/audio/04_nutricion/02_mantente_bien_hidratado.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 798
         },
         {
           "id": "03_incluye_proteinas_con_una_alta_proporcio",
           "titulo": "Incluye proteínas con una alta proporción PC:C en cada comida completa",
           "audio": "assets/audio/04_nutricion/03_incluye_proteinas_con_una_alta_proporcio.mp3",
           "transcript": "assets/audio/04_nutricion/03_incluye_proteinas_con_una_alta_proporcio.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 467
         },
         {
           "id": "04_elige_verduras_fibrosas_y_algo_de_fruta",
           "titulo": "Elige verduras fibrosas y (algo de) fruta como tus principales fuentes de carbohidratos",
           "audio": "assets/audio/04_nutricion/04_elige_verduras_fibrosas_y_algo_de_fruta.mp3",
           "transcript": "assets/audio/04_nutricion/04_elige_verduras_fibrosas_y_algo_de_fruta.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 668
         },
         {
           "id": "05_incluye_grasas_saludables_en_la_mayoria",
           "titulo": "Incluye grasas saludables en la mayoría de tus comidas y refrigerios",
           "audio": "assets/audio/04_nutricion/05_incluye_grasas_saludables_en_la_mayoria.mp3",
           "transcript": "assets/audio/04_nutricion/05_incluye_grasas_saludables_en_la_mayoria.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 614
         },
         {
           "id": "06_consume_alimentos_fermentados_bajos_en_a",
           "titulo": "Consume alimentos fermentados bajos en azúcar",
           "audio": "assets/audio/04_nutricion/06_consume_alimentos_fermentados_bajos_en_a.mp3",
           "transcript": "assets/audio/04_nutricion/06_consume_alimentos_fermentados_bajos_en_a.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 619
         },
         {
           "id": "07_consume_pescados_grasos_de_mar_o_conside",
           "titulo": "Consume pescados grasos de mar o considera tomar suplementos de omega-3",
           "audio": "assets/audio/04_nutricion/07_consume_pescados_grasos_de_mar_o_conside.mp3",
           "transcript": "assets/audio/04_nutricion/07_consume_pescados_grasos_de_mar_o_conside.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 398
         }
       ],
       "pdf": {
@@ -367,8 +367,8 @@
           "titulo": "Introducción del capítulo",
           "audio": "assets/audio/05_luz/00_introduccion.mp3",
           "transcript": "assets/audio/05_luz/00_introduccion.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 1130
         },
         {
           "id": "01_exponte_a_luz_brillante_durante_la_prime",
@@ -427,56 +427,56 @@
           "titulo": "Introducción del capítulo",
           "audio": "assets/audio/06_enfoque/00_introduccion.mp3",
           "transcript": "assets/audio/06_enfoque/00_introduccion.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 1730
         },
         {
           "id": "01_entra_en_un_estado_de_alerta_y_concentra",
           "titulo": "Entra en un estado de alerta y concentración",
           "audio": "assets/audio/06_enfoque/01_entra_en_un_estado_de_alerta_y_concentra.mp3",
           "transcript": "assets/audio/06_enfoque/01_entra_en_un_estado_de_alerta_y_concentra.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 6157
         },
         {
           "id": "02_utiliza_el_contraste_mental_para_alcanza",
           "titulo": "Utiliza el contraste mental para alcanzar un «estado de urgencia» y lograr tus metas",
           "audio": "assets/audio/06_enfoque/02_utiliza_el_contraste_mental_para_alcanza.mp3",
           "transcript": "assets/audio/06_enfoque/02_utiliza_el_contraste_mental_para_alcanza.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 1463
         },
         {
           "id": "03_acepta_los_errores_para_potenciar_tu_ren",
           "titulo": "Acepta los errores para potenciar tu rendimiento",
           "audio": "assets/audio/06_enfoque/03_acepta_los_errores_para_potenciar_tu_ren.mp3",
           "transcript": "assets/audio/06_enfoque/03_acepta_los_errores_para_potenciar_tu_ren.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 912
         },
         {
           "id": "04_da_prioridad_al_sueno_la_noche_posterior",
           "titulo": "Da prioridad al sueño la noche posterior a una sesión de aprendizaje",
           "audio": "assets/audio/06_enfoque/04_da_prioridad_al_sueno_la_noche_posterior.mp3",
           "transcript": "assets/audio/06_enfoque/04_da_prioridad_al_sueno_la_noche_posterior.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 142
         },
         {
           "id": "05_incorpora_microdescansos_en_tus_sesiones",
           "titulo": "Incorpora microdescansos en tus sesiones de aprendizaje",
           "audio": "assets/audio/06_enfoque/05_incorpora_microdescansos_en_tus_sesiones.mp3",
           "transcript": "assets/audio/06_enfoque/05_incorpora_microdescansos_en_tus_sesiones.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 404
         },
         {
           "id": "06_refuerza_la_retencion_de_habilidades_e_i",
           "titulo": "Refuerza la retención de habilidades e información nuevas mediante el repaso mental",
           "audio": "assets/audio/06_enfoque/06_refuerza_la_retencion_de_habilidades_e_i.mp3",
           "transcript": "assets/audio/06_enfoque/06_refuerza_la_retencion_de_habilidades_e_i.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 281
         }
       ],
       "pdf": {
