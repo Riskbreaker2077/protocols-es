@@ -375,16 +375,16 @@
           "titulo": "Exponte a luz brillante durante la primera hora tras despertar para elevar (aún más) tus niveles matutinos de cortisol",
           "audio": "assets/audio/05_luz/01_exponte_a_luz_brillante_durante_la_prime.mp3",
           "transcript": "assets/audio/05_luz/01_exponte_a_luz_brillante_durante_la_prime.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 1434
         },
         {
           "id": "02_expon_tus_ojos_a_la_luz_del_sol_al_caer",
           "titulo": "Expón tus ojos a la luz del sol al caer la tarde para amortiguar los efectos nocivos de la luz artificial nocturna",
           "audio": "assets/audio/05_luz/02_expon_tus_ojos_a_la_luz_del_sol_al_caer.mp3",
           "transcript": "assets/audio/05_luz/02_expon_tus_ojos_a_la_luz_del_sol_al_caer.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 547
         },
         {
           "id": "03_evita_exponerte_a_luces_brillantes_desde",
