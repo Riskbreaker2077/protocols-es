@@ -32,7 +32,7 @@
           "audio": "assets/audio/01_dormir/00_introduccion.mp3",
           "transcript": "assets/audio/01_dormir/00_introduccion.md",
           "available": true,
-          "duration": 585
+          "duration": 749
         },
         {
           "id": "01_mira_la_luz_del_sol_lo_antes_posible_al",
@@ -40,7 +40,7 @@
           "audio": "assets/audio/01_dormir/01_mira_la_luz_del_sol_lo_antes_posible_al.mp3",
           "transcript": "assets/audio/01_dormir/01_mira_la_luz_del_sol_lo_antes_posible_al.md",
           "available": true,
-          "duration": 2130
+          "duration": 2687
         },
         {
           "id": "02_mira_la_luz_del_sol_al_final_de_la_tarde",
@@ -48,7 +48,7 @@
           "audio": "assets/audio/01_dormir/02_mira_la_luz_del_sol_al_final_de_la_tarde.mp3",
           "transcript": "assets/audio/01_dormir/02_mira_la_luz_del_sol_al_final_de_la_tarde.md",
           "available": true,
-          "duration": 432
+          "duration": 529
         },
         {
           "id": "03_evita_mirar_luces_brillantes_durante_la",
