@@ -171,40 +171,40 @@
           "titulo": "Introducción del capítulo",
           "audio": "assets/audio/02_ejercicio/00_introduccion.mp3",
           "transcript": "assets/audio/02_ejercicio/00_introduccion.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 3639
         },
         {
           "id": "01_camina_todo_lo_posible_cada_dia",
           "titulo": "Camina todo lo posible cada día",
           "audio": "assets/audio/02_ejercicio/01_camina_todo_lo_posible_cada_dia.mp3",
           "transcript": "assets/audio/02_ejercicio/01_camina_todo_lo_posible_cada_dia.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 1157
         },
         {
           "id": "02_entrena_la_fuerza_tres_veces_por_semana",
           "titulo": "Entrena la fuerza tres veces por semana",
           "audio": "assets/audio/02_ejercicio/02_entrena_la_fuerza_tres_veces_por_semana.mp3",
           "transcript": "assets/audio/02_ejercicio/02_entrena_la_fuerza_tres_veces_por_semana.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 5247
         },
         {
           "id": "03_haz_entrenamiento_cardiovascular_tres_ve",
           "titulo": "Haz entrenamiento cardiovascular tres veces por semana",
           "audio": "assets/audio/02_ejercicio/03_haz_entrenamiento_cardiovascular_tres_ve.mp3",
           "transcript": "assets/audio/02_ejercicio/03_haz_entrenamiento_cardiovascular_tres_ve.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 1808
         },
         {
           "id": "04_incorpora_breves_ejercicios_de_movilidad",
           "titulo": "Incorpora breves ejercicios de movilidad y flexibilidad de dos a cuatro veces por semana",
           "audio": "assets/audio/02_ejercicio/04_incorpora_breves_ejercicios_de_movilidad.mp3",
           "transcript": "assets/audio/02_ejercicio/04_incorpora_breves_ejercicios_de_movilidad.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 1053
         }
       ],
       "pdf": {
@@ -503,32 +503,32 @@
           "titulo": "Reemplaza la divagación mental por una conciencia anclada en el presente",
           "audio": "assets/audio/07_crecimiento_personal/01_personal_reemplaza_la_divagacion_mental.mp3",
           "transcript": "assets/audio/07_crecimiento_personal/01_personal_reemplaza_la_divagacion_mental.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 1261
         },
         {
           "id": "02_personal_aplica_la_guia_de_james_hollis",
           "titulo": "Aplica la guía de James Hollis para forjar tu mejor vida",
           "audio": "assets/audio/07_crecimiento_personal/02_personal_aplica_la_guia_de_james_hollis.mp3",
           "transcript": "assets/audio/07_crecimiento_personal/02_personal_aplica_la_guia_de_james_hollis.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 2147
         },
         {
           "id": "03_personal_resuelve_las_heridas_internas_m",
           "titulo": "Resuelve las heridas internas mediante la escritura expresiva",
           "audio": "assets/audio/07_crecimiento_personal/03_personal_resuelve_las_heridas_internas_m.mp3",
           "transcript": "assets/audio/07_crecimiento_personal/03_personal_resuelve_las_heridas_internas_m.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 643
         },
         {
           "id": "04_personal_reencuadra_la_perdida_para_atra",
           "titulo": "Reencuadra la pérdida para atravesar el duelo con entereza",
           "audio": "assets/audio/07_crecimiento_personal/04_personal_reencuadra_la_perdida_para_atra.mp3",
           "transcript": "assets/audio/07_crecimiento_personal/04_personal_reencuadra_la_perdida_para_atra.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 786
         }
       ],
       "pdf": {
