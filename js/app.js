@@ -44,26 +44,34 @@ function renderContinuar(){
   if (!ch) return;
   var card = document.getElementById('continuarCard');
   if (!card){
-    card = document.createElement('div');
+    card = document.createElement('a');
     card.id = 'continuarCard';
-    card.className = 'continue-card';
-    ancla.parentNode.insertBefore(card, ancla);
+    card.className = 'bookmark';
+    card.href = '#';
+    if (ancla.classList.contains('home-links')){
+      // en la portada, el marcapáginas sale del borde inferior de la carátula
+      var cover = $('cover');
+      cover.parentNode.insertBefore(card, cover.nextSibling);
+      document.body.classList.add('has-bookmark');
+    } else ancla.parentNode.insertBefore(card, ancla);
   }
   var detalle = esAudio
-    ? 'Escuchaste: ' + esc(ch.tracks[last.i] ? ch.tracks[last.i].titulo : 'pista') + ' · min ' + fmt(last.t)
-    : 'Leyendo: ' + ultimoL.p + '% del texto · ' + (ultimoL.lang === 'es' ? 'en español' : 'in English');
+    ? esc(ch.tracks[last.i] ? ch.tracks[last.i].titulo : 'Audio') + ' · min ' + fmt(last.t)
+    : (ultimoL.p > 0 ? 'Leído ' + ultimoL.p + '%' : 'Empezaste a leer') + (ultimoL.lang === 'es' ? '' : ' · in English');
+  card.setAttribute('aria-label', 'Continúa donde quedaste: ' + ch.titulo);
   card.innerHTML =
-    '<div class="cc-txt"><span class="cc-k">Continúa donde quedaste</span>' +
-    '<strong>' + esc(ch.titulo) + '</strong>' +
-    '<span class="cc-d">' + detalle + '</span></div>' +
-    '<a class="cc-btn" id="ccBtn" href="#">Continuar</a>';
-  card.querySelector('#ccBtn').addEventListener('click', function(e){
+    '<span class="bm-ribbon" aria-hidden="true">' + (esAudio ? ICO.play : ICO.book) + '</span>' +
+    '<span class="bm-txt"><span class="bm-k">Continúa donde quedaste</span>' +
+    '<span class="bm-t">' + esc(ch.titulo) + '</span>' +
+    '<span class="bm-d">' + detalle + '</span></span>' +
+    '<span class="bm-go" aria-hidden="true">' + ICO.arrow + '</span>';
+  card.onclick = function(e){
     e.preventDefault();
     if (esAudio) sessionStorage.setItem('pe_autoresume', JSON.stringify({ slug: capSlug, i: last.i }));
     location.href = esAudio
       ? 'biblioteca.html?cap=' + encodeURIComponent(capSlug)
       : 'lector.html?cap=' + encodeURIComponent(capSlug) + '&lang=' + ultimoL.lang;
-  });
+  };
 }
 var CH_ART = {
   '00_introduccion':'assets/img/c0_introduccion.png',

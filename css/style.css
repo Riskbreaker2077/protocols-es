@@ -657,18 +657,31 @@ body.nota-abierta{overflow:hidden}
 .notas-lista .ni-back{flex:none;padding:.1em .45em;border-radius:6px;color:var(--ink-faint);font-size:1.1em;line-height:1}
 .notas-lista .ni-back:hover{background:var(--surface-2);color:var(--accent-strong);text-decoration:none}
 
-/* ---------- tarjeta "Continúa donde quedaste" ---------- */
-.continue-card{
-  display:flex;align-items:center;justify-content:space-between;gap:14px;
-  background:var(--accent-soft);border:1px solid var(--accent);border-radius:var(--radius);
-  padding:14px 16px;margin:0 0 18px;max-width:680px;
+/* ---------- marcapáginas "Continúa donde quedaste" ----------
+   Una cinta como la de un libro: cuelga de un borde (la carátula en el inicio,
+   una línea fina en las demás páginas) y lleva al punto guardado. */
+.bookmark{
+  --bm-w:30px;
+  display:flex;align-items:flex-start;gap:12px;max-width:680px;
+  margin:0 0 18px;padding:0 4px 0 14px;border-top:1px solid var(--line);
+  color:var(--ink);text-decoration:none!important;font-family:var(--font-cover);
 }
-.continue-card .cc-txt{display:flex;flex-direction:column;gap:3px;min-width:0}
-.continue-card .cc-k{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-strong)}
-.continue-card strong{font-size:1.02rem;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.continue-card .cc-d{font-size:.82rem;color:var(--ink-soft);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.continue-card .cc-btn{
-  flex-shrink:0;background:var(--accent);color:#fff;text-decoration:none;font-weight:600;
-  padding:9px 18px;border-radius:999px;font-size:.9rem;transition:background .2s;
+.bm-ribbon{
+  flex:none;width:var(--bm-w);height:58px;margin-top:-1px;
+  display:grid;place-items:start center;padding-top:9px;color:#fff7ea;
+  background:linear-gradient(180deg,#c9321f 0%,#d63a2d 35%,#e15e26 75%,#e67e27 100%);
+  clip-path:polygon(0 0,100% 0,100% 100%,50% 80%,0 100%);
+  box-shadow:inset 0 6px 6px -4px rgba(70,12,0,.55);
+  transform-origin:top center;transition:transform .35s cubic-bezier(.3,1.4,.5,1);
 }
-.continue-card .cc-btn:hover{background:var(--accent-strong)}
+.bm-ribbon .ico-svg{width:15px;height:15px}
+.bm-txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px;padding-top:9px}
+.bm-k{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:.62rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint)}
+.bm-t{font-size:.98rem;font-weight:700;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bm-d{font-size:.76rem;font-weight:600;color:var(--ink-soft);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bm-go{flex:none;align-self:center;margin-top:6px;width:34px;height:34px;border-radius:50%;
+  display:grid;place-items:center;color:var(--cover-blue);transition:transform .25s ease,background .2s}
+.bm-go .ico-svg{width:20px;height:20px}
+.bookmark:hover .bm-ribbon,.bookmark:focus-visible .bm-ribbon{transform:scaleY(1.12)}
+.bookmark:hover .bm-go{transform:translate(2px,-2px);background:var(--accent-soft)}
+.bookmark:focus-visible{outline:3px solid var(--cover-blue);outline-offset:4px;border-radius:4px}
