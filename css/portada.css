@@ -32,7 +32,7 @@ main.home{
   /* alto que ocupa todo lo que no es la carátula: márgenes, pista y enlaces */
   --home-reserve:116px;
 }
-body.has-bookmark main.home{--home-reserve:176px}
+body.has-bookmark main.home{--home-reserve:184px}
 
 /* ---------- la carátula (proporción del libro: 687 × 1024) ---------- */
 .cover{
@@ -64,9 +64,9 @@ body.has-bookmark main.home{--home-reserve:176px}
 .home-links a{color:var(--ink-soft)}
 
 /* marcapáginas: la cinta asoma bajo el borde inferior de la carátula */
-.home .bookmark{
+.home .bookmarks{
   width:var(--cover-w);max-width:none;flex:none;margin:-14px 0 -4px;
-  border-top:0;padding:0 2px 0 calc(var(--cover-w) * .07);
+  border-top:0;padding:0 0 0 calc(var(--cover-w) * .07 - 12px);
   --cover-w:min(calc(100vw - 32px), 480px, calc((100svh - var(--home-reserve)) * .671));
   animation:bmDrop .6s cubic-bezier(.22,.8,.36,1) .5s both;
 }

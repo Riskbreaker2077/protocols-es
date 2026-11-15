@@ -26,56 +26,72 @@ function guardaAudio(slug, i, t){
   _guarda('pe_audio_pos', PROGRESO.audioPos);
   _guarda('pe_audio_last', PROGRESO.last);
 }
+/* Marcapáginas: una cinta por modo, como un libro con dos cintas.
+   Naranja = lectura (texto), azul = audio. Cada una lleva a su punto guardado. */
 function renderContinuar(){
   var toc = $('readerToc');
   // en el lector solo aparece en el índice: dentro de un capítulo ya estás leyendo
   if (toc && toc.hidden) return;
   var ancla = document.querySelector('.home-links') || $('chaptersGrid') || toc;
   if (!ancla || !DATA) return;
-  var last = PROGRESO.last, ultimoL = null, ultTs = 0, k;
+  function capDe(slug){
+    for (var j = 0; j < DATA.chapters.length; j++){ if (DATA.chapters[j].slug === slug) return DATA.chapters[j]; }
+    return null;
+  }
+  var marcas = [], k, ultimoL = null, ultTs = 0;
   for (k in PROGRESO.leido){
     if (PROGRESO.leido[k].ts > ultTs){
       ultTs = PROGRESO.leido[k].ts;
       ultimoL = { cap: k.split(':')[0], lang: k.split(':')[1], p: PROGRESO.leido[k].p };
     }
   }
-  if (!last && !ultimoL) return;
-  var esAudio = last && (!ultimoL || last.ts >= ultTs);
-  var capSlug = esAudio ? last.slug : ultimoL.cap;
-  var ch = null;
-  for (var j = 0; j < DATA.chapters.length; j++){ if (DATA.chapters[j].slug === capSlug){ ch = DATA.chapters[j]; break; } }
-  if (!ch) return;
-  var card = document.getElementById('continuarCard');
-  if (!card){
-    card = document.createElement('a');
-    card.id = 'continuarCard';
-    card.className = 'bookmark';
-    card.href = '#';
+  var chL = ultimoL && capDe(ultimoL.cap);
+  if (chL) marcas.push({
+    tipo: 'leer', ts: ultTs, ch: chL, ico: ICO.book, k: 'Leyendo',
+    d: (ultimoL.p > 0 ? 'Leído ' + ultimoL.p + '%' : 'Empezaste a leer') + (ultimoL.lang === 'es' ? '' : ' · in English'),
+    go: function(){ location.href = 'lector.html?cap=' + encodeURIComponent(ultimoL.cap) + '&lang=' + ultimoL.lang; }
+  });
+  var last = PROGRESO.last, chA = last && capDe(last.slug);
+  if (chA) marcas.push({
+    tipo: 'oir', ts: last.ts || 0, ch: chA, ico: ICO.play, k: 'Escuchando',
+    d: 'Min ' + fmt(last.t) + (chA.tracks[last.i] ? ' · ' + chA.tracks[last.i].titulo : ''),
+    go: function(){
+      sessionStorage.setItem('pe_autoresume', JSON.stringify({ slug: last.slug, i: last.i }));
+      location.href = 'biblioteca.html?cap=' + encodeURIComponent(last.slug);
+    }
+  });
+  if (!marcas.length) return;
+
+  var wrap = document.getElementById('continuarCard');
+  if (!wrap){
+    wrap = document.createElement('nav');
+    wrap.id = 'continuarCard';
+    wrap.className = 'bookmarks';
+    wrap.setAttribute('aria-label', 'Continúa donde quedaste');
     if (ancla.classList.contains('home-links')){
-      // en la portada, el marcapáginas sale del borde inferior de la carátula
+      // en la portada, las cintas salen del borde inferior de la carátula
       var cover = $('cover');
-      cover.parentNode.insertBefore(card, cover.nextSibling);
+      cover.parentNode.insertBefore(wrap, cover.nextSibling);
       document.body.classList.add('has-bookmark');
-    } else if (ancla === toc) toc.insertBefore(card, toc.firstChild);
-    else ancla.parentNode.insertBefore(card, ancla);
+    } else if (ancla === toc) toc.insertBefore(wrap, toc.firstChild);
+    else ancla.parentNode.insertBefore(wrap, ancla);
   }
-  var detalle = esAudio
-    ? esc(ch.tracks[last.i] ? ch.tracks[last.i].titulo : 'Audio') + ' · min ' + fmt(last.t)
-    : (ultimoL.p > 0 ? 'Leído ' + ultimoL.p + '%' : 'Empezaste a leer') + (ultimoL.lang === 'es' ? '' : ' · in English');
-  card.setAttribute('aria-label', 'Continúa donde quedaste: ' + ch.titulo);
-  card.innerHTML =
-    '<span class="bm-ribbon" aria-hidden="true">' + (esAudio ? ICO.play : ICO.book) + '</span>' +
-    '<span class="bm-txt"><span class="bm-k">Continúa donde quedaste</span>' +
-    '<span class="bm-t">' + esc(ch.titulo) + '</span>' +
-    '<span class="bm-d">' + detalle + '</span></span>' +
-    '<span class="bm-go" aria-hidden="true">' + ICO.arrow + '</span>';
-  card.onclick = function(e){
-    e.preventDefault();
-    if (esAudio) sessionStorage.setItem('pe_autoresume', JSON.stringify({ slug: capSlug, i: last.i }));
-    location.href = esAudio
-      ? 'biblioteca.html?cap=' + encodeURIComponent(capSlug)
-      : 'lector.html?cap=' + encodeURIComponent(capSlug) + '&lang=' + ultimoL.lang;
-  };
+  wrap.classList.toggle('is-double', marcas.length > 1);
+  wrap.innerHTML = '';
+  marcas.forEach(function(m){
+    var a = document.createElement('a');
+    a.className = 'bookmark bm-' + m.tipo;
+    a.href = '#';
+    a.setAttribute('aria-label', m.k + ': ' + m.ch.titulo + ', ' + m.d);
+    a.innerHTML =
+      '<span class="bm-ribbon" aria-hidden="true">' + m.ico + '</span>' +
+      '<span class="bm-txt"><span class="bm-k">' + m.k + '</span>' +
+      '<span class="bm-t">' + esc(m.ch.titulo) + '</span>' +
+      '<span class="bm-d">' + esc(m.d) + '</span></span>' +
+      '<span class="bm-go" aria-hidden="true">' + ICO.arrow + '</span>';
+    a.addEventListener('click', function(e){ e.preventDefault(); m.go(); });
+    wrap.appendChild(a);
+  });
 }
 var CH_ART = {
   '00_introduccion':'assets/img/c0_introduccion.png',

@@ -467,8 +467,9 @@ body.has-player{padding-bottom:calc(var(--tabbar-h) + 76px)}
 .reader-empty{text-align:center;color:var(--ink-faint);padding:60px 20px}
 .reader-toc{max-width:680px;margin:0 auto;padding:0 20px 40px;display:flex;flex-direction:column;gap:10px}
 .reader-toc[hidden]{display:none}
-.reader-toc a.bookmark{margin:0 0 8px;width:100%;background:none;border:0;border-top:1px solid var(--line);border-radius:0;padding:0 4px 0 14px;box-shadow:none;transform:none;align-items:flex-start;gap:12px;min-height:0}
-.reader-toc a.bookmark:hover{border-color:var(--line);transform:none}
+.reader-toc .bookmarks{margin:0 0 8px;width:100%}
+.reader-toc a.bookmark{background:none;border:0;border-radius:0;padding:0 2px 0 12px;transform:none;align-items:flex-start;gap:10px;min-height:0}
+.reader-toc a.bookmark:hover{transform:none}
 .reader-toc a{
   display:flex;align-items:center;gap:14px;min-height:64px;
   background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
@@ -660,21 +661,28 @@ body.nota-abierta{overflow:hidden}
 .notas-lista .ni-back:hover{background:var(--surface-2);color:var(--accent-strong);text-decoration:none}
 
 /* ---------- marcapáginas "Continúa donde quedaste" ----------
-   Una cinta como la de un libro: cuelga de un borde (la carátula en el inicio,
-   una línea fina en las demás páginas) y lleva al punto guardado. */
+   Cintas como las de un libro: cuelgan de un borde (la carátula en el inicio,
+   una línea fina en las demás páginas). Naranja = lectura, azul = audio. */
+.bookmarks{
+  display:flex;gap:10px;max-width:680px;margin:0 0 18px;
+  border-top:1px solid var(--line);font-family:var(--font-cover);
+}
 .bookmark{
-  --bm-w:30px;
-  display:flex;align-items:flex-start;gap:12px;max-width:680px;
-  margin:0 0 18px;padding:0 4px 0 14px;border-top:1px solid var(--line);
-  color:var(--ink);text-decoration:none!important;font-family:var(--font-cover);
+  flex:1 1 0;min-width:0;
+  display:flex;align-items:flex-start;gap:10px;padding:0 2px 0 12px;
+  color:var(--ink);text-decoration:none!important;
 }
 .bm-ribbon{
-  flex:none;width:var(--bm-w);height:58px;margin-top:-1px;
+  flex:none;width:30px;height:58px;margin-top:-1px;
   display:grid;place-items:start center;padding-top:9px;color:#fff7ea;
   background:linear-gradient(180deg,#c9321f 0%,#d63a2d 35%,#e15e26 75%,#e67e27 100%);
   clip-path:polygon(0 0,100% 0,100% 100%,50% 80%,0 100%);
   box-shadow:inset 0 6px 6px -4px rgba(70,12,0,.55);
   transform-origin:top center;transition:transform .35s cubic-bezier(.3,1.4,.5,1);
+}
+.bm-oir .bm-ribbon{
+  background:linear-gradient(180deg,#0089bd 0%,#00a0dc 40%,#19b6ee 100%);
+  box-shadow:inset 0 6px 6px -4px rgba(0,40,70,.55);
 }
 .bm-ribbon .ico-svg{width:15px;height:15px}
 .bm-txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px;padding-top:9px}
@@ -684,6 +692,10 @@ body.nota-abierta{overflow:hidden}
 .bm-go{flex:none;align-self:center;margin-top:6px;width:34px;height:34px;border-radius:50%;
   display:grid;place-items:center;color:var(--cover-blue);transition:transform .25s ease,background .2s}
 .bm-go .ico-svg{width:20px;height:20px}
+/* con dos cintas, cada una ocupa media fila: la flecha sobra */
+.bookmarks.is-double .bm-go{display:none}
+.bookmarks.is-double .bm-t{font-size:.9rem;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.15}
 .bookmark:hover .bm-ribbon,.bookmark:focus-visible .bm-ribbon{transform:scaleY(1.12)}
 .bookmark:hover .bm-go{transform:translate(2px,-2px);background:var(--accent-soft)}
+.bookmark:hover .bm-t{color:var(--accent-strong)}
 .bookmark:focus-visible{outline:3px solid var(--cover-blue);outline-offset:4px;border-radius:4px}
