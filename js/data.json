@@ -119,40 +119,40 @@
           "titulo": "Ajusta tu horario de consumo de cafeína para dormir mejor",
           "audio": "assets/audio/01_dormir/11_ajusta_tu_horario_de_consumo_de_cafeina.mp3",
           "transcript": "assets/audio/01_dormir/11_ajusta_tu_horario_de_consumo_de_cafeina.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 949
         },
         {
           "id": "12_evita_el_alcohol_durante_las_ocho_horas",
           "titulo": "Evita el alcohol durante las ocho horas previas a dormir",
           "audio": "assets/audio/01_dormir/12_evita_el_alcohol_durante_las_ocho_horas.mp3",
           "transcript": "assets/audio/01_dormir/12_evita_el_alcohol_durante_las_ocho_horas.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 457
         },
         {
           "id": "13_evita_usar_el_cannabis_para_dormir",
           "titulo": "Evita usar el cannabis para dormir",
           "audio": "assets/audio/01_dormir/13_evita_usar_el_cannabis_para_dormir.mp3",
           "transcript": "assets/audio/01_dormir/13_evita_usar_el_cannabis_para_dormir.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 427
         },
         {
           "id": "14_evita_las_pantallas_al_menos_durante_la",
           "titulo": "Evita las pantallas al menos durante la última hora antes de acostarte",
           "audio": "assets/audio/01_dormir/14_evita_las_pantallas_al_menos_durante_la.mp3",
           "transcript": "assets/audio/01_dormir/14_evita_las_pantallas_al_menos_durante_la.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 357
         },
         {
           "id": "15_guia_practica_para_evitar_el_desfase_hor",
           "titulo": "Guía práctica para evitar el desfase horario (jet lag)",
           "audio": "assets/audio/01_dormir/15_guia_practica_para_evitar_el_desfase_hor.mp3",
           "transcript": "assets/audio/01_dormir/15_guia_practica_para_evitar_el_desfase_hor.md",
-          "available": false,
-          "duration": null
+          "available": true,
+          "duration": 584
         }
       ],
       "pdf": {
