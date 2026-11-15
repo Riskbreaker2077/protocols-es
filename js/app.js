@@ -27,7 +27,10 @@ function guardaAudio(slug, i, t){
   _guarda('pe_audio_last', PROGRESO.last);
 }
 function renderContinuar(){
-  var ancla = document.querySelector('.home-links') || $('chaptersGrid');
+  var toc = $('readerToc');
+  // en el lector solo aparece en el índice: dentro de un capítulo ya estás leyendo
+  if (toc && toc.hidden) return;
+  var ancla = document.querySelector('.home-links') || $('chaptersGrid') || toc;
   if (!ancla || !DATA) return;
   var last = PROGRESO.last, ultimoL = null, ultTs = 0, k;
   for (k in PROGRESO.leido){
@@ -53,7 +56,8 @@ function renderContinuar(){
       var cover = $('cover');
       cover.parentNode.insertBefore(card, cover.nextSibling);
       document.body.classList.add('has-bookmark');
-    } else ancla.parentNode.insertBefore(card, ancla);
+    } else if (ancla === toc) toc.insertBefore(card, toc.firstChild);
+    else ancla.parentNode.insertBefore(card, ancla);
   }
   var detalle = esAudio
     ? esc(ch.tracks[last.i] ? ch.tracks[last.i].titulo : 'Audio') + ' · min ' + fmt(last.t)
@@ -780,8 +784,8 @@ document.addEventListener('DOMContentLoaded', function(){
   loadData(function(data){
     DATA = data;
     renderGrid();
-    renderContinuar();
     renderReaderToc();
+    renderContinuar();
     var params = new URLSearchParams(location.search);
     var cap = params.get('cap');
     // compatibilidad: enlaces viejos index.html?cap= → la página de capítulo es biblioteca

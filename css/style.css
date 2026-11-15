@@ -467,6 +467,8 @@ body.has-player{padding-bottom:calc(var(--tabbar-h) + 76px)}
 .reader-empty{text-align:center;color:var(--ink-faint);padding:60px 20px}
 .reader-toc{max-width:680px;margin:0 auto;padding:0 20px 40px;display:flex;flex-direction:column;gap:10px}
 .reader-toc[hidden]{display:none}
+.reader-toc a.bookmark{margin:0 0 8px;width:100%;background:none;border:0;border-top:1px solid var(--line);border-radius:0;padding:0 4px 0 14px;box-shadow:none;transform:none;align-items:flex-start;gap:12px;min-height:0}
+.reader-toc a.bookmark:hover{border-color:var(--line);transform:none}
 .reader-toc a{
   display:flex;align-items:center;gap:14px;min-height:64px;
   background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
